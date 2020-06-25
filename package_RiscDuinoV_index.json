@@ -1,0 +1,83 @@
+{
+  "packages": 
+  [
+      {
+          "name": "RiscDuinoV",
+          "maintainer": "Pedro",
+          "email": "user@server.com",
+          "platforms": 
+          [
+              {
+                "name": "RiscDuinoV",
+                "architecture": "riscv",
+                "version": "1.0.0",
+                "category": "FPGA",
+                "boards":
+                [
+                    {
+                        "name": "FPGA"
+                    }
+                ],
+                "toolsDependencies":
+                [
+                    {
+                        "packager": "RiscDuinoV",
+                        "name": "riscv-compiler",
+                        "version": "1.0.0"
+                    },
+                    {
+                        "packager": "RiscDuinoV",
+                        "name": "programmer",
+                        "version": "1.0.0"
+                    }
+                ]
+              }
+          ],
+          "tools":
+          [
+                {
+                    "name": "riscv-compiler",
+                    "version": "1.0.0",
+                    "systems":
+                    [
+                        {
+                            "host": "i686-mingw32",
+                            "url": "https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-w64-mingw32.zip",
+                            "archiveFileName":"riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-w64-mingw32.zip"
+                        },
+                        {
+                            "host":"x86_64-apple-darwin",
+                            "url":"https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-apple-darwin.tar.gz",
+                            "archiveFileName":"riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-apple-darwin.tar.gz"
+                        },
+                        {
+                            "host":"x86_64-pc-linux-gnu",
+                            "url":"https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-linux-ubuntu14.tar.gz",
+                            "archiveFileName":"riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-linux-ubuntu14.tar.gz"
+                        }
+                    ]
+                },
+                {
+                    "name": "programmer",
+                    "version": "1.0.0",
+                    "systems":
+                    [
+                        {
+                            "host": "i686-mingw32",
+                            "url": "https://github.com/PedroCarvalho64/RISCV/raw/master/Tools/Windows/Risc_V_Programmer.exe",
+                            "archiveFileName": "Risc_V_Programmer.exe"
+                        },
+                        {
+                            "host":"x86_64-apple-darwin"
+                        },
+                        {
+                            "host":"x86_64-pc-linux-gnu",
+                            "url": "https://github.com/PedroCarvalho64/RISCV/raw/master/Tools/Linux-x86_64/Risc_V_Programmer.exe",
+                            "archiveFileName": "Risc_V_Programmer.exe"
+                        }
+                    ]
+                }
+          ]
+      }
+  ]
+}
