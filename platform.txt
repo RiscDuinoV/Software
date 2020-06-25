@@ -1,0 +1,66 @@
+
+#
+# f32c MI32/RV32 (mips/risc-v) Core and platform.
+#
+
+name=RiscDuinoV
+version=1.0.0
+
+# Compile variables
+# ----------------------
+compiler-prefix=riscv64-unknown
+compiler.c.cmd={compiler-prefix}-elf-gcc
+compiler.c.flags=-c -Os -march={arch} -mabi=ilp32 -DF_CPU={build.f_cpu} -fpeel-loops -ftree-ter -ffreestanding -ffunction-sections -fdata-sections -Wall -std=gnu11
+compiler.c.extra_flags=
+compiler.cpp.cmd={compiler-prefix}-elf-g++
+compiler.cpp.flags=-c -Os -march={arch} -mabi=ilp32 -DF_CPU={build.f_cpu} -fpeel-loops -ftree-ter -ffreestanding -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions -Wall -std=gnu++11
+compiler.cpp.extra_flags=
+compiler.ld.cmd={compiler-prefix}-elf-g++
+compiler.ar.cmd={compiler-prefix}-elf-ar
+compiler.ar.flags=rcs
+compiler.ar.extra_flags=
+compiler.objcopy.eep.flags=-O srec
+compiler.objcopy.cmd={compiler-prefix}-elf-objcopy
+compiler.elf2hex.flags=-R .rel.dyn -R .MIPS.abiflags
+compiler.elf2hex.cmd={compiler-prefix}-elf-objcopy
+compiler.size.cmd={compiler-prefix}-elf-size
+compiler.define=-DARDUINO=
+# f32c from Board Manager JSON automatic installation:
+compiler.path={runtime.tools.riscv-compiler.path}/bin/
+
+
+## Compile S files
+recipe.S.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.flags} -DARDUINO={runtime.ide.version} {compiler.c.extra_flags} {includes} "{source_file}" -o "{object_file}"
+
+## Compile c files
+recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.flags} -DARDUINO={runtime.ide.version} {compiler.c.extra_flags} {includes} "{source_file}" -o "{object_file}"
+
+## Compile c++ files
+recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} -DARDUINO={runtime.ide.version} {compiler.cpp.extra_flags} {includes} "{source_file}" -o "{object_file}"
+
+## Create archives
+recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{archive_file_path}" "{object_file}"
+
+## Link gc-sections, archives, and objects
+recipe.c.combine.pattern="{compiler.path}{compiler.ld.cmd}" -o "{build.path}/{build.project_name}.elf" {object_files}  -march=rv32i -mabi=ilp32 --specs=nano.specs --specs=nosys.specs -nostdlib -Xlinker --gc-sections -mcmodel=medany -nostartfiles -ffreestanding -T{build.system.path}/link_user.ld -L{build.system.path} -lcrt0 "{archive_file_path}" -lriscvSoC -lc -lgcc -Xlinker --defsym=BRAM={upload.maximum_size}
+
+## Create binary
+recipe.objcopy.eep.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.flags} -O binary "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.bin"
+
+## Create hex
+recipe.objcopy.hex.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.flags} -O srec "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.hex"
+
+## Compute size
+recipe.size.pattern="{compiler.path}{compiler.size.cmd}" --format=berkeley "{build.path}/{build.project_name}.elf"
+recipe.size.regex=\s*[0-9]+\s+[0-9]+\s+[0-9]+\s+([0-9]+).*
+
+
+# Uploader tools
+# -------------------
+
+# RiscDuinoV uploader tool
+
+tools.programmer.path={runtime.tools.programmer.path}
+tools.programmer.cmd.path={path}/programmer
+tools.programmer.upload.pattern="{cmd.path}" {upload.flags} "{build.path}/{build.project_name}.{upload.protocol}"
+tools.programmer.upload.params.verbose=
