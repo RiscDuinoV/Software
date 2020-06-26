@@ -1,40 +1,44 @@
 {
-  "packages": 
-  [
-      {
-          "name": "RiscDuinoV",
-          "maintainer": "Pedro",
-          "email": "user@server.com",
-          "platforms": 
-          [
-              {
-                "name": "RiscDuinoV",
-                "architecture": "riscv",
-                "version": "1.0.0",
-                "category": "FPGA",
-                "boards":
-                [
-                    {
-                        "name": "FPGA"
-                    }
-                ],
-                "toolsDependencies":
-                [
-                    {
-                        "packager": "RiscDuinoV",
-                        "name": "riscv-compiler",
-                        "version": "1.0.0"
-                    },
-                    {
-                        "packager": "RiscDuinoV",
-                        "name": "programmer",
-                        "version": "1.0.0"
-                    }
-                ]
-              }
-          ],
-          "tools":
-          [
+    "packages": 
+    [
+        {
+            "name": "RiscDuinoV",
+            "maintainer": "Pedro",
+            "email": "user@server.com",
+            "platforms": 
+            [
+                {
+                  "name": "RiscDuinoV",
+                  "architecture": "riscv",
+                  "version": "1.0.0",
+                  "category": "FPGA",
+                  "url":"https://raw.githubusercontent.com/PedroCarvalho64/TempRepo/master/Software-master.zip",
+                  "archiveFileName": "Software-master.zip",
+                  "checksum": "SHA-256:cfffd7c698ed63591fdac4857dcc56dc4695c7b20d8bdd058a5ab7b00817c7a4",
+                  "size": "31904",
+                  "boards":
+                  [
+                      {
+                          "name": "FPGA"
+                      }
+                  ],
+                  "toolsDependencies":
+                  [
+                      {
+                          "packager": "RiscDuinoV",
+                          "name": "riscv-compiler",
+                          "version": "1.0.0"
+                      },
+                      {
+                          "packager": "RiscDuinoV",
+                          "name": "programmer",
+                          "version": "1.0.0"
+                      }
+                  ]
+                }
+            ],
+            "tools":
+            [
                 {
                     "name": "riscv-compiler",
                     "version": "1.0.0",
@@ -43,17 +47,16 @@
                         {
                             "host": "i686-mingw32",
                             "url": "https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-w64-mingw32.zip",
-                            "archiveFileName":"riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-w64-mingw32.zip"
-                        },
-                        {
-                            "host":"x86_64-apple-darwin",
-                            "url":"https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-apple-darwin.tar.gz",
-                            "archiveFileName":"riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-apple-darwin.tar.gz"
+                            "archiveFileName":"riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-w64-mingw32.zip",
+                            "checksum":"SHA-256:cf02e979c4975a2e1b5f79cb4cb62f3a1f33302835a88ff368927e7d745a359e",
+                            "size":"237804500"
                         },
                         {
                             "host":"x86_64-pc-linux-gnu",
                             "url":"https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-linux-ubuntu14.tar.gz",
-                            "archiveFileName":"riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-linux-ubuntu14.tar.gz"
+                            "archiveFileName":"riscv64-unknown-elf-gcc-8.3.0-2019.08.0-x86_64-linux-ubuntu14.tar.gz",
+                            "checksum":"SHA-256:92851bf6adb6109002b7256e654a3c68995dd1cdcf891726cb0c847043e87e0f",
+                            "size":"231295353"
                         }
                     ]
                 },
@@ -64,20 +67,24 @@
                     [
                         {
                             "host": "i686-mingw32",
-                            "url": "https://github.com/PedroCarvalho64/RISCV/raw/master/Tools/Windows/Risc_V_Programmer.exe",
-                            "archiveFileName": "Risc_V_Programmer.exe"
+                            "url": "https://raw.githubusercontent.com/PedroCarvalho64/TempRepo/master/Programmer.zip",
+                            "archiveFileName": "Programmer.zip",
+                            "checksum":"SHA-256:0692db761d2ffd5bba34f3b5218b52174b7ca1f1abc809ef06ff4c29dda6c70a",
+                            "size":"33490"
                         },
                         {
                             "host":"x86_64-apple-darwin"
                         },
                         {
                             "host":"x86_64-pc-linux-gnu",
-                            "url": "https://github.com/PedroCarvalho64/RISCV/raw/master/Tools/Linux-x86_64/Risc_V_Programmer.exe",
-                            "archiveFileName": "Risc_V_Programmer.exe"
+                            "url": "https://raw.githubusercontent.com/PedroCarvalho64/TempRepo/master/Programmer.tar.gz",
+                            "archiveFileName": "Programmer.tar.gz",
+                            "checksum":"SHA-256:9376bd7dfc842ad9efc66e1cab8686c15057e57f4bd2c279c70c5ed15854f682",
+                            "size":"17822"
                         }
                     ]
                 }
-          ]
-      }
-  ]
+            ]
+        }
+    ]
 }
