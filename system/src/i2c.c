@@ -1,5 +1,5 @@
 #include <dev/i2c.h>
-static int s_i2c_write(uint32_t base, uint8_t byte, uint8_t isAddress)
+static int s_i2c_write(uint32_t base, uint8_t byte)
 {
     uint16_t tmp;
     do
@@ -7,7 +7,7 @@ static int s_i2c_write(uint32_t base, uint8_t byte, uint8_t isAddress)
         LB(tmp, 1, base);
     } 
     while ((tmp & 0x1) != 0); // Check if busy
-    tmp = isAddress ? 0x800 | byte : 0x200 | byte;
+    tmp = 0xA00 | byte;
     SH(tmp, 0, base);
     do
     {
@@ -24,20 +24,20 @@ static int s_i2c_read(uint32_t base, uint8_t *byte)
         LB(tmp, 1, base);
     } 
     while ((tmp & 0x1) != 0);   // Check if busy
-    tmp = 0x100;
-    SH(0x100, 0, base);       // Start Read
+    SH(0x900, 0, base);       // Start Read
     do
     {
         LB(tmp, 1, base);
     } 
     while (tmp & 0x1);
+    
     LB(*byte, 0, base);
     return (tmp >> 1) & 0x1;   
 }
 int i2c_write(uint32_t base, uint8_t address, const uint8_t *buffer, int len)
 {
     address = address << 1;
-    if (s_i2c_write(base, address, 1))
+    if (s_i2c_write(base, address))
     {
         uint16_t tmp;
         do
@@ -50,7 +50,7 @@ int i2c_write(uint32_t base, uint8_t address, const uint8_t *buffer, int len)
     }
     for (int i = 0; i < len; i++)
     {
-        if (s_i2c_write(base, buffer[i], 0))
+        if (s_i2c_write(base, buffer[i]))
             return -1;
     }
     SH(0x400, 0, base);
@@ -59,7 +59,7 @@ int i2c_write(uint32_t base, uint8_t address, const uint8_t *buffer, int len)
 int i2c_read(uint32_t base, uint8_t address, uint8_t *buffer, int len)
 {
     address = address << 1 | 1;
-    if (s_i2c_write(base, address, 1))
+    if (s_i2c_write(base, address))
     {
         uint16_t tmp;
         do
