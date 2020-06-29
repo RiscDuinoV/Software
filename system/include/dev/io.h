@@ -40,8 +40,9 @@
 
 
 #define	IO_BASE		0xfffff800
-
 #define	IO_ADDR(a)	(IO_BASE | (a))
+
+#define GPIO_BASE       IO_ADDR(0x000)
 
 #define UART0           IO_ADDR(0x300)
 #define UART1           IO_ADDR(0x304)

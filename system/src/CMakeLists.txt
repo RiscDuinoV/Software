@@ -3,7 +3,7 @@ add_library(crt0 STATIC riscv/start.S)
 add_library(crt0FreeRTOS STATIC riscv/start_FreeRTOS.S)
 
 add_library(riscvSoC STATIC 
-    riscv/mtime.c sio.c interrupt_controller.c i2c.c
+    riscv/mtime.c sio.c interrupt_controller.c i2c.c gpio.c
 )
 
 # add_library(syscall STATIC syscall.c)
