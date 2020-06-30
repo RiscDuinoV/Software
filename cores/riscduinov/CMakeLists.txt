@@ -1,3 +1,3 @@
-add_library(riscvSoCCXX STATIC 
-    HardwareSerial.cpp Print.cpp
+add_library(ArduinoLib STATIC 
+    HardwareSerial.cpp Print.cpp wiring_digital.c
 )

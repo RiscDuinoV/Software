@@ -43,6 +43,7 @@
 #define	IO_ADDR(a)	(IO_BASE | (a))
 
 #define GPIO_BASE       IO_ADDR(0x000)
+#define	IO_LED		    IO_ADDR(0x090)	/* word, WR */
 
 #define UART0           IO_ADDR(0x300)
 #define UART1           IO_ADDR(0x304)
@@ -83,7 +84,6 @@
 
 #define	IO_PUSHBTN	IO_ADDR(0x700)	/* word, RD */
 #define	IO_DIPSW	IO_ADDR(0x702)	/* word, RD */
-#define	IO_LED		IO_ADDR(0x710)	/* word, WR */
 #define	IO_LCD		IO_ADDR(0x712)	/* word, WR */
 
 #define INTERRUPT_MASK      IO_ADDR(0x7E0)

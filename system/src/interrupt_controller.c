@@ -20,7 +20,7 @@ void interrupt_handler()
         }
     }
 }
-void attachInterrupt(uint8_t num, void (*fun_callback)(void))
+void attachInterrupt(uint8_t num, void (*fun_callback)(void), int mode)
 {
     if (num < 64)
     {

@@ -7,9 +7,9 @@ extern "C" {
 uint64_t getMTIME();
 void setMTIMECMP(uint64_t val);
 uint64_t getMTIMECMP();
-void delay(uint32_t ms);
+void delay_ms(uint32_t ms);
 void delay_us(uint32_t us);
-#endif /* MTIME_H_ */
 #ifdef __cplusplus
 }
 #endif
+#endif /* MTIME_H_ */

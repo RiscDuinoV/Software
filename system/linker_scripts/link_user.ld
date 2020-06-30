@@ -11,7 +11,7 @@ OUTPUT_ARCH(riscv)
 ENTRY(crtStart)
 
 MEMORY {
-  RAM      (rwx): ORIGIN = 2K, LENGTH = (20K - 2K)
+  RAM      (rwx): ORIGIN = 2K, LENGTH = (MEMSIZE - 2K)
 }
 
 _stack_size = 0x500;
@@ -70,15 +70,18 @@ SECTIONS {
 
   .bss (NOLOAD) : {
 		. = ALIGN(4);
-		/* This is used by the startup in order to initialize the .bss secion */
-		_bss_start = .;
+		/* This is used by the startup in order to initialize the .bss section */
+    _sbss = .;
+		__bss_start__ = _sbss;
+    __dso_handle = _sbss;
     *(.sbss*)
     *(.gnu.linkonce.sb.*)
     *(.bss .bss.*)
     *(.gnu.linkonce.b.*)
     *(COMMON)
 		. = ALIGN(4);
-		_bss_end = .;
+    _ebss = .;
+		__bss_end__ = _ebss;
   } > RAM
 
 

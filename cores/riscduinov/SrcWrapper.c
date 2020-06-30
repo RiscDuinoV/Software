@@ -1,0 +1,8 @@
+#include "SrcWrapper.h"
+#include "gpio.c"
+#include "i2c.c"
+#include "interrupt_controller.c"
+#include "sio.c"
+#include "spi.c"
+#include "syscall.c"
+#include "riscv/mtime.c"

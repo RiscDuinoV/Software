@@ -1,22 +1,26 @@
 #include "dev/gpio.h"
 #include "dev/io.h"
-void pinMode(uint8_t pin, uint8_t mode)
+void gpio_setDirection(uint32_t base, uint8_t direction)
 {
     uint8_t tmp;
-    uint32_t gpio_base = GPIO_BASE + pin*4;
-    LB(tmp, 2, gpio_base);
-    tmp = (tmp & 0x6) | (mode & 0x1);
-    SB(tmp, 2, gpio_base);
+    LB(tmp, 2, base);
+    tmp = (tmp & 0x6) | (direction & 0x1);
+    SB(tmp, 2, base);
 }
-void digitalWrite(uint8_t pin, uint8_t val)
+void gpio_Write(uint32_t base, uint32_t value)
 {
-    uint32_t gpio_base = GPIO_BASE + pin*4;
-    SB(val, 0, gpio_base);
+    SH(value, 0, base);
 }
-int digitalRead(uint8_t pin)
+int gpio_Read(uint32_t base)
 {
-    uint32_t gpio_base = GPIO_BASE + pin*4;
     uint8_t tmp;
-    LB(tmp, 0, gpio_base);
-    return tmp & 0x1;
+    LH(tmp, 0, base);
+    return tmp;
+}
+void gpio_Toggle(uint32_t base)
+{
+    uint16_t tmp;
+    LH(tmp, 0, base);
+    tmp = ~tmp;
+    SH(tmp, 0, base);
 }

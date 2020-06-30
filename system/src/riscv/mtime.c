@@ -19,7 +19,7 @@ uint64_t getMTIMECMP()
 {
 	return *mtimecmp_reg;
 }
-void delay(uint32_t ms)
+void delay_ms(uint32_t ms)
 {
 	uint64_t endval = MS * ms + getMTIME();
 	while (getMTIME() < endval);
