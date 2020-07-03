@@ -78,8 +78,8 @@ int digitalRead(uint8_t pin);
 }
 #endif
 // C++ Declarations
-//#include "WCharacter.h"
-//#include "WString.h"
+#include "WCharacter.h"
+#include "WString.h"
 #include "HardwareSerial.h"
 void setup(void);
 void loop(void);

@@ -24,6 +24,7 @@
 
 #include <inttypes.h>
 #include "Print.h"
+#include "WString.h"
 
 // compatability macros for testing
 /*
