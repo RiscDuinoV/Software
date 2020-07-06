@@ -1,4 +1,4 @@
-add_library(crt0 STATIC riscv/start.S)
+add_library(crt0 STATIC riscv/start.S riscv/interrupt_handler.S)
 
 add_library(crt0FreeRTOS STATIC riscv/start_FreeRTOS.S)
 
