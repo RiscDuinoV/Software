@@ -1,15 +1,16 @@
 # Software
-Les librairies système du RiscDuinoV sont disponibles dans ce depôt. On va trouver dans ce dépôt les libraries C systèmes et les librairies Arduino qu'on peut utiliser lorsqu'on compile en C++.
+
+System libraries are available in this repository. Source system C libraries are available in **system** and Arduino system C++ libraries are available in **Cores/riscduinov**.
 
 ## Using system libraries
 
-Avant de pouvoir compiler un projet qui contient des libraries systèmes, il faut d'abord compiler les libraries systèmes. Vous devez le faire qu'une fois.
+Before being able to compile a project that contains system libraries, you must before compile the library to be able to used them in you're project. You just need to compile them once because the script in Tools/Compiler/Toolchain-Script.cmake is going to use their binaries and link them with your application.
 
 ## Compiling system libraries
 
-Pour compiler les libraries systèmes, vous devez installer CMake. Se referer [ici](https://github.com/RiscDuinoV/RISCV/tree/master/RiscV_Projects) pour comment le faire.
+To compile the system libraries, you'll need first to install CMake and other dependencies. Check [here](https://github.com/RiscDuinoV/RISCV/tree/master/RiscV_Projects)
 
-Des que vous avez configuré CMake, vous avez juste à le compiler comme un projet normal et tappant les commandes suivantes :
+Once you've install all dependencies and CMake, you'll need to configure the project and then compile.
 
 ```sh
 $ cmake -G "your generator"
@@ -24,4 +25,4 @@ $ ninja
 ...
 ```
 
-Les fichiers binaires seront crées dans **system/lib/riscv**.
+The library binaries can be found at **system/lib/riscv**.
