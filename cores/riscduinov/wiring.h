@@ -7,8 +7,6 @@ extern "C" {
 #include <riscv/mtime.h>
 uint64_t millis(void);
 uint64_t micros(void);
-#define delay(ms)   delay_ms(ms)
-#define delayMicroseconds(us) delay_us(us)
 #ifdef __cplusplus
 }
 #endif

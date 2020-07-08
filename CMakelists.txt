@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.0)
 #Set processor architecture (MIPS, RISC-V)
 set(BOOTLOADER TRUE)
+set(F_CPU "12000000")
 
 # Specifiy where is the .cmake script is.
-set(CMAKE_TOOLCHAIN_FILE "${PROJECT_SOURCE_DIR}/../../Tools/Compilateur/GNU-Toolchain.cmake")
+set(CMAKE_TOOLCHAIN_FILE "${PROJECT_SOURCE_DIR}/../../Tools/Compiler/Toolchain_Script.cmake")
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/system/lib/riscv)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/system/lib/riscv)

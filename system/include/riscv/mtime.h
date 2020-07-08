@@ -9,6 +9,8 @@ void setMTIMECMP(uint64_t val);
 uint64_t getMTIMECMP();
 void delay_ms(uint32_t ms);
 void delay_us(uint32_t us);
+#define delay(ms)   delay_ms(ms)
+#define delayMicroseconds(us) delay_us(us)
 #ifdef __cplusplus
 }
 #endif
