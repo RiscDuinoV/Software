@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 #Set processor architecture (MIPS, RISC-V)
-set(BOOTLOADER TRUE)
+set(LIBRARY_BUILD TRUE)
 set(F_CPU "12000000")
 
 # Specifiy where is the .cmake script is.
