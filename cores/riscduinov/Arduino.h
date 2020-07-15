@@ -6,8 +6,9 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <dev/interrupt_controller.h>
+#include "dev/interrupt_controller.h"
 #include "wiring.h"
+#include "dev/io.h"
 #define HIGH 0x1
 #define LOW  0x0
 
@@ -71,9 +72,9 @@ typedef unsigned int word;
 #define bit(b) (1UL << (b))
 typedef bool boolean;
 typedef uint8_t byte;
-void pinMode(uint8_t pin, uint8_t mode);
-void digitalWrite(uint8_t pin, uint8_t val);
-int digitalRead(uint8_t pin);
+void pinMode(uint32_t pin, uint32_t mode);
+void digitalWrite(uint32_t pin, uint32_t val);
+int digitalRead(uint32_t pin);
 #ifdef __cplusplus
 }
 #endif
@@ -89,15 +90,18 @@ uint16_t makeWord(byte h, byte l);
 
 #define word(...) makeWord(__VA_ARGS__)
 
-unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout = 1000000L);
-unsigned long pulseInLong(uint8_t pin, uint8_t state, unsigned long timeout = 1000000L);
+//unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout = 1000000L);
+//unsigned long pulseInLong(uint8_t pin, uint8_t state, unsigned long timeout = 1000000L);
 
-void tone(uint8_t _pin, unsigned int frequency, unsigned long duration = 0);
-void noTone(uint8_t _pin);
+//void tone(uint8_t _pin, unsigned int frequency, unsigned long duration = 0);
+//void noTone(uint8_t _pin);
 
 // WMath prototypes
 long random(long);
 long random(long, long);
 void randomSeed(unsigned long);
 long map(long, long, long, long, long);
+
+static HardwareSerial Serial(UART_USB_BASE);
+
 #endif // Arduino_h
