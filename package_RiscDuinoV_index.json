@@ -3,16 +3,16 @@
     [
         {
             "name": "RiscDuinoV",
-            "maintainer": "Pedro",
-            "email": "user@server.com",
+            "maintainer": "Pedro CARVALHO MENDES",
+            "email": "pedrocarvalho-12@hotmail.com",
             "platforms": 
             [
                 {
                   "name": "RiscDuinoV",
                   "architecture": "riscv",
-                  "version": "1.0.0",
+                  "version": "0.1.0",
                   "category": "FPGA",
-                  "url":"https://raw.githubusercontent.com/PedroCarvalho64/TempRepo/master/Software-master.zip",
+                  "url":"https://github.com/RiscDuinoV/Software/archive/master.zip",
                   "archiveFileName": "Software-master.zip",
                   "checksum": "SHA-256:cfffd7c698ed63591fdac4857dcc56dc4695c7b20d8bdd058a5ab7b00817c7a4",
                   "size": "31904",
@@ -32,7 +32,7 @@
                       {
                           "packager": "RiscDuinoV",
                           "name": "programmer",
-                          "version": "1.0.0"
+                          "version": "0.1.0"
                       }
                   ]
                 }
@@ -62,25 +62,25 @@
                 },
                 {
                     "name": "programmer",
-                    "version": "1.0.0",
+                    "version": "0.1.0",
                     "systems":
                     [
                         {
                             "host": "i686-mingw32",
-                            "url": "https://raw.githubusercontent.com/PedroCarvalho64/TempRepo/master/Programmer.zip",
-                            "archiveFileName": "Programmer.zip",
-                            "checksum":"SHA-256:0692db761d2ffd5bba34f3b5218b52174b7ca1f1abc809ef06ff4c29dda6c70a",
-                            "size":"33490"
+                            "url": "https://github.com/RiscDuinoV/RiscDuinoV-Bin/raw/master/Programmer-win32.zip",
+                            "archiveFileName": "Programmer-win32.zip",
+                            "checksum":"SHA-256:a38c8ed7919fff6ea351b892ac982c11a328e5b8a3fa7e425ab611f612ba3b78",
+                            "size":"36233"
                         },
                         {
                             "host":"x86_64-apple-darwin"
                         },
                         {
                             "host":"x86_64-pc-linux-gnu",
-                            "url": "https://raw.githubusercontent.com/PedroCarvalho64/TempRepo/master/Programmer.tar.gz",
-                            "archiveFileName": "Programmer.tar.gz",
-                            "checksum":"SHA-256:9376bd7dfc842ad9efc66e1cab8686c15057e57f4bd2c279c70c5ed15854f682",
-                            "size":"17822"
+                            "url": "https://github.com/RiscDuinoV/RiscDuinoV-Bin/raw/master/Programmer-linux.zip",
+                            "archiveFileName": "Programmer-linux.zip",
+                            "checksum":"SHA-256:780ed36a3e704b79863b44664d9d5c13bda487392989634ec0850999fa641008",
+                            "size":"17682"
                         }
                     ]
                 }
