@@ -4,7 +4,7 @@
 #
 
 name=RiscDuinoV
-version=1.0.0
+version=0.1.0
 source_file={build.system.path}/src/riscv/start.S
 # Compile variables
 # ----------------------
@@ -25,7 +25,7 @@ compiler.elf2hex.flags=-R .rel.dyn -R .MIPS.abiflags
 compiler.elf2hex.cmd={compiler-prefix}-elf-objcopy
 compiler.size.cmd={compiler-prefix}-elf-size
 compiler.define=-DARDUINO=
-# f32c from Board Manager JSON automatic installation:
+
 compiler.path={runtime.tools.riscv-compiler.path}/bin/
 
 
@@ -43,7 +43,7 @@ recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compil
 
 ## Link gc-sections, archives, and objects
 #recipe.c.combine.pattern="{compiler.path}{compiler.ld.cmd}" -o "{build.path}/{build.project_name}.elf" {object_files}  -march=rv32i -mabi=ilp32 --specs=nano.specs --specs=nosys.specs -nostdlib -Xlinker --gc-sections -mcmodel=medany -nostartfiles -ffreestanding -T{build.system.path}/linker_scripts/link_user.ld -L{build.system.path}/lib/riscv -lcrt0 "{archive_file_path}" -lArduinoLib -lriscvSoC -lc -lgcc -Xlinker --defsym=BRAM={upload.maximum_size}
-recipe.c.combine.pattern="{compiler.path}{compiler.ld.cmd}" -o "{build.path}/{build.project_name}.elf" {object_files}  -march=rv32i -mabi=ilp32 --specs=nano.specs --specs=nosys.specs -nostdlib -Xlinker --gc-sections -mcmodel=medany -nostartfiles -ffreestanding -T{build.system.path}/linker_scripts/link_user.ld -L{build.system.path}/lib/riscv "{archive_file_path}" -lc -lgcc -Xlinker --defsym=MEMSIZE={upload.maximum_size}
+recipe.c.combine.pattern="{compiler.path}{compiler.ld.cmd}" -o "{build.path}/{build.project_name}.elf" {object_files}  -march=rv32i -mabi=ilp32 --specs=nano.specs --specs=nosys.specs -nostdlib -Xlinker --gc-sections -mcmodel=medany -nostartfiles -ffreestanding -T{build.system.path}/linker_scripts/linker_script.ld -L{build.system.path}/lib/riscv "{archive_file_path}" -lc -lgcc -Xlinker --defsym=MEMSIZE={upload.maximum_size} -Xlinker --defsym=SECTION_START=2K -Xlinker --defsym=STACK_SIZE={build.stacksize} -Xlinker --defsym=HEAP_SIZE={build.heapsize}
 
 ## Create binary
 recipe.objcopy.eep.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.flags} -O binary "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.bin"
@@ -61,7 +61,7 @@ recipe.size.regex=\s*[0-9]+\s+[0-9]+\s+[0-9]+\s+([0-9]+).*
 
 # RiscDuinoV uploader tool
 
-tools.programmer.path={runtime.tools.programmer.path}
+tools.programmer.path={runtime.tools.Programmer.path}
 tools.programmer.cmd.path={path}/programmer
 tools.programmer.upload.pattern="{cmd.path}" {upload.flags} "{build.path}/{build.project_name}.{upload.protocol}"
 tools.programmer.upload.params.verbose=
