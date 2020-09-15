@@ -23,12 +23,7 @@ SECTIONS {
     *(.start_jump);
     *(.text);
   } > RAM
-  /*
-  ._vector ORIGIN(RAM): {
-    *crt0FreeRTOS.a(.start_jump);
-    *crt0FreeRTOS.a(.text);
-  } > RAM
-*/
+  
   ._user_heap (NOLOAD):
   {
     . = ALIGN(8);
@@ -90,12 +85,6 @@ SECTIONS {
     *(.rdata)
     *(.rodata .rodata.*)
     *(.gnu.linkonce.r.*)
-  } > RAM
-
-  .noinit (NOLOAD) : {
-      . = ALIGN(4);
-      *(.noinit .noinit.*)
-      . = ALIGN(4);
   } > RAM
 /*
   .memory : {
