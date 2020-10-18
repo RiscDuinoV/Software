@@ -126,6 +126,7 @@
 		:						\
 		: "r" (ticks)					\
 	)
+#define	NOP() __asm __volatile__ ("NOP")
 
 #endif /* __ASSEMBLER__ */
 

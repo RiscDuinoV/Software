@@ -5,8 +5,8 @@ extern "C" {
 #endif
 #include <stdint.h>
 #include <dev/io.h>
-int i2c_write(uint32_t base, uint8_t address, const uint8_t *buffer, int len);
-int i2c_read(uint32_t base, uint8_t address, uint8_t *buffer, int len);
+int i2cWrite(uint32_t base, uint8_t address, uint8_t *ptr_buffer, uint32_t len);
+int i2cRead(uint32_t base, uint8_t address, uint8_t *ptr_buffer, uint32_t len);
 #ifdef __cplusplus
 }
 #endif

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 #Set processor architecture (MIPS, RISC-V)
 set(LIBRARY_BUILD TRUE)
-set(F_CPU "12000000")
+set(F_CPU "100000000")
 
 # Specifiy where is the .cmake script is.
 set(CMAKE_TOOLCHAIN_FILE "${PROJECT_SOURCE_DIR}/../../Tools/Compiler/Toolchain_Script.cmake")
