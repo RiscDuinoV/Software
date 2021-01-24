@@ -8,7 +8,8 @@ set(riscvSoC_src
     "${CMAKE_CURRENT_LIST_DIR}/interrupt_controller.c" 
     "${CMAKE_CURRENT_LIST_DIR}/i2c.c"
     "${CMAKE_CURRENT_LIST_DIR}/gpio.c"
+    "${CMAKE_CURRENT_LIST_DIR}/syscall.c"
 )
-add_library(crt0 STATIC ${crt0_src})
-
-add_library(riscvSoC STATIC ${riscvSoC_src})
+# add_library(crt0 STATIC ${crt0_src})
+# 
+# add_library(riscvSoC STATIC ${riscvSoC_src})

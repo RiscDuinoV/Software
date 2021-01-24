@@ -1,0 +1,20 @@
+cmake_minimum_required (VERSION 3.0)
+
+set(BUILD_AS_BOOTLOADER TRUE)
+set(ARCH "rv32i")
+set(ABI "ilp32")
+set(MEMSIZE "2K")
+set(F_CPU "12000000")
+set(SECTION_START "0")
+set(ApplicationName "Sortie")
+# set(BUILD_WITH_SPI "-DSPI_FLASH")
+set(CMAKE_C_FLAGS "${BUILD_WITH_SPI} -DBOOTLOADER_BUILD")
+set(STACK_SIZE "0x100")
+set(HEAP_SIZE "0")
+
+set(CMAKE_TOOLCHAIN_FILE "${PROJECT_SOURCE_DIR}/../../tools/cmake/Toolchain_Script.cmake")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+project(bootloader C ASM)
+include("${PROJECT_SOURCE_DIR}/../../tools/cmake/Options.cmake")
+add_subdirectory(src)

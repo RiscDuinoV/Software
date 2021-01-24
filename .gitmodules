@@ -1,0 +1,3 @@
+[submodule "tools/OpenOCD/openocd_riscv"]
+	path = tools/OpenOCD/openocd_riscv
+	url = https://github.com/SpinalHDL/openocd_riscv

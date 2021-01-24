@@ -8,4 +8,4 @@ set(ArduinoLib_src
     "${CMAKE_CURRENT_LIST_DIR}/WString.cpp" 
     "${CMAKE_CURRENT_LIST_DIR}/itoa.c"
 )
-add_library(ArduinoLib STATIC ${ArduinoLib_src})
+# add_library(ArduinoLib STATIC ${ArduinoLib_src})
