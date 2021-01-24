@@ -1,5 +1,14 @@
-add_library(crt0 STATIC riscv/start.S riscv/interrupt_handler.S)
-
-add_library(riscvSoC STATIC 
-    riscv/mtime.c sio.c interrupt_controller.c i2c.c gpio.c
+set(crt0_src 
+    "${CMAKE_CURRENT_LIST_DIR}/riscv/start.S" 
+    "${CMAKE_CURRENT_LIST_DIR}/riscv/interrupt_handler.S"
 )
+set(riscvSoC_src
+    "${CMAKE_CURRENT_LIST_DIR}/riscv/mtime.c" 
+    "${CMAKE_CURRENT_LIST_DIR}/sio.c"
+    "${CMAKE_CURRENT_LIST_DIR}/interrupt_controller.c" 
+    "${CMAKE_CURRENT_LIST_DIR}/i2c.c"
+    "${CMAKE_CURRENT_LIST_DIR}/gpio.c"
+)
+add_library(crt0 STATIC ${crt0_src})
+
+add_library(riscvSoC STATIC ${riscvSoC_src})
