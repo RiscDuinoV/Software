@@ -20,20 +20,23 @@ void interrupt_handler()
         }
     }
 }
-void attachInterrupt(uint8_t num, void (*fun_callback)(void), int mode)
+void attachInterrupt(int num, void (*fun_callback)(void), int mode)
 {
-    if (num < 64)
+    if (num < 64 && num >= 0)
     {
         intr_vect[num] = (uint32_t)fun_callback;
         *intr_mask |= (uint64_t)(1ULL << num);
     }
 }
-void detachInterrupt(uint8_t num)
+void enableInterrupt(int num)
+{
+    if (num < 64 && num >= 0)
+        *intr_mask |= (uint64_t)(1ULL << num);
+}
+void detachInterrupt(int num)
 {
     if (num < 64)
-    {
-        *intr_mask &= ~(uint64_t)(1ULL << num);
-    }
+        *intr_mask &= ~((uint64_t)(1ULL << num));
 }
 void enableMachineInterrupts()
 {

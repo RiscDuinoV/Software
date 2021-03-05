@@ -4,10 +4,12 @@
 extern "C" {
 #endif
 #include <stdint.h>
-void attachInterrupt(uint8_t num, void (*fun_callback)(void), int mode);
-void detachInterrupt(uint8_t num);
+void attachInterrupt(int num, void (*fun_callback)(void), int mode);
+void enableInterrupt(int num);
+void detachInterrupt(int num);
 void enableMachineInterrupts();
 void disableMachineInterrupts();
+#define disableInterrupt(num) detachInterrupt(num)
 #ifdef __cplusplus
 }
 #endif
