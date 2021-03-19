@@ -7,15 +7,15 @@
 #define US      (uint32_t)(1e-6 * F_CPU)
 volatile uint64_t *mtime_reg    = (volatile uint64_t *)MTIME_BASE;
 volatile uint64_t *mtimecmp_reg = (volatile uint64_t *)MTIMECMP_BASE;
-uint64_t getMTIME()
+inline uint64_t getMTIME()
 {
 	return *mtime_reg;
 }
-void setMTIMECMP(uint64_t val)
+inline void setMTIMECMP(uint64_t val)
 {
 	*mtimecmp_reg = val;
 }
-uint64_t getMTIMECMP()
+inline uint64_t getMTIMECMP()
 {
 	return *mtimecmp_reg;
 }

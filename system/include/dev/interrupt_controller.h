@@ -4,12 +4,23 @@
 extern "C" {
 #endif
 #include <stdint.h>
-void attachInterrupt(int num, void (*fun_callback)(void), int mode);
-void enableInterrupt(int num);
-void detachInterrupt(int num);
+void interrupt_handler();
+void externalInterruptHandler();
+void attachExternalInterrupt(int num, void (*fun_callback)(void));
+void enableExternalInterrupt(int num);
+void detachExternalInterrupt(int num);
+void timerInterruptHandler();
+void attachTimerInterrupt(int num, void (*fun_callback)(void));
+void enableTimerInterrupt(int num);
+void dettachTimerInterrupt(int num);
 void enableMachineInterrupts();
 void disableMachineInterrupts();
+void enableExternalInterrupts();
+void disableExternalInterrupts();
+void enableTimerInterrupts();
+void disableTimerInterrupts();
 #define disableInterrupt(num) detachInterrupt(num)
+#define attachInterrupt(num, fun_callback, mode) attachExternalInterrupt(num, fun_callback)
 #ifdef __cplusplus
 }
 #endif

@@ -9,6 +9,7 @@ set(riscvSoC_src
     "${CMAKE_CURRENT_LIST_DIR}/i2c.c"
     "${CMAKE_CURRENT_LIST_DIR}/gpio.c"
     "${CMAKE_CURRENT_LIST_DIR}/syscall.c"
+    "${CMAKE_CURRENT_LIST_DIR}/sysmem.c"
 )
 # add_library(crt0 STATIC ${crt0_src})
 # 
