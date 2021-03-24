@@ -1,6 +1,6 @@
 #include <dev/i2c.h>
-#define START_TRANSMISSION  0x8
-#define END_TRANSMISSION    0x4
+#define START_TRANSMISSION  0x4
+#define END_TRANSMISSION    0x0
 #define TRIG_WRITE          0x2
 #define TRIG_READ           0x1
 #define ACK_FLAG            0x4
@@ -28,14 +28,14 @@ static uint8_t s_getAck(uint32_t base)
 static uint8_t s_i2cWrite(uint32_t base, uint8_t data)
 {
     SB(data, 0, base);
-    SB(TRIG_WRITE, 1, base);
+    SB(TRIG_WRITE | START_TRANSMISSION, 1, base);
     NOP();
     while (s_isBusy(base));
     return s_getAck(base);
 }
 static void s_i2cRead(uint32_t base, uint8_t *data)
 {
-    SB(TRIG_READ, 1, base);
+    SB(TRIG_READ | START_TRANSMISSION, 1, base);
     NOP();
     while (s_isBusy(base));
     LB(*data, 0, base);
@@ -46,10 +46,16 @@ int i2cWrite(uint32_t base, uint8_t address, uint8_t *ptr_buffer, uint32_t len)
     address <<= 1;
     while (s_isBusy(base));
     if (s_i2cWrite(base, address))
+    {
+        s_EndTransmission(base);
         return -1;
+    }
     for (uint32_t i = 0; i < len; i++)
         if (s_i2cWrite(base, ptr_buffer[i]))
+        {
+            s_EndTransmission(base);
             return -1;
+        }
     s_EndTransmission(base);
     return 0;
 }
@@ -59,7 +65,10 @@ int i2cRead(uint32_t base, uint8_t address, uint8_t *ptr_buffer, uint32_t len)
     address = (address << 1) | 1;
     while (s_isBusy(base));
     if (s_i2cWrite(base, address))
+    {
+        s_EndTransmission(base);
         return -1;
+    }
     for (uint32_t i = 0; i < len; i++)
         s_i2cRead(base, &ptr_buffer[i]);
     s_EndTransmission(base);
