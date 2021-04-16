@@ -66,6 +66,8 @@
 #define	IO_SIO_STATUS	IO_ADDR(0x301)	/* byte, RD */
 #define	IO_SIO_BAUD	IO_ADDR(0x302)	/* half, WR */
 
+#define SPI_BASE0       IO_ADDR(0x340)
+
 #define	IO_SPI_FLASH	IO_ADDR(0x340)	/* half, RW */
 #define	IO_SPI_SDCARD	IO_ADDR(0x350)	/* half, RW */
 
