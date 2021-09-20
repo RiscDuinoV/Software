@@ -1,27 +1,26 @@
 #include "dev/spi.h"
 #include "dev/io.h"
-inline void spi_beginTransaction(uint32_t base)
+#define SPI_BUSY    0x100
+inline void spi_start_transfer(uint32_t base)
 {
     SB(1, 1, base);
 }
-inline void spi_endTransaction(uint32_t base)
+uint8_t spi_transfer(uint32_t base, uint8_t data)
+{
+    uint32_t ret;
+    SB(data, 0, base);
+    do
+    {
+        LW(ret, 0, base);
+    } 
+    while (ret & SPI_BUSY);
+    return ret;
+}
+inline void spi_end_transfer(uint32_t base)
 {
     SB(0, 1, base);
 }
-uint8_t spi_transfer(uint32_t base, uint8_t byte)
+void spi_set_frequecy(uint32_t base, uint32_t freq)
 {
-    uint32_t ret;
-    SB(byte, 0, base);
-    NOP();
-    do
-    {
-    	LW(ret, 0, base);
-    } 
-    while (ret & 0x100);
-    return ret;
-}
-void spi_setClock(uint32_t base, int freq)
-{
-    uint32_t val = freq *  131072 / F_CPU;
-    LH(val, 2, base);
+    SH((freq * 65536) / F_CPU, 1, base); 
 }

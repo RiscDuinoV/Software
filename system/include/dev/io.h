@@ -117,8 +117,11 @@
 #define	LCD_DATA	0x0f
 #define	LCD_RS		0x10
 #define	LCD_E		0x20
-#define MTIME_BASE          IO_ADDR(0x380)
-#define MTIMECMP_BASE       IO_ADDR(0x388)
+//#define MTIME_BASE          IO_ADDR(0x380)
+//#define MTIMECMP_BASE       IO_ADDR(0x388)
+#define MTIME_BASE          0xFFFFF400
+#define MTIMECMP_BASE       MTIME_BASE + 8
+
 
 /*
 0xFFFFF800 ... 0xFFFFFFFF
