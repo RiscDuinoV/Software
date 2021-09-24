@@ -1,76 +1,71 @@
-#include <dev/i2c.h>
-#define START_TRANSMISSION  0x4
-#define END_TRANSMISSION    0x0
-#define TRIG_WRITE          0x2
-#define TRIG_READ           0x1
-#define ACK_FLAG            0x4
-#define BUSY_FLAG           0x1
-static uint8_t s_isBusy(uint32_t base)
+#include "dev/i2c.h"
+#include "dev/io.h"
+
+#define I2C_EN          0x100
+#define I2C_TRG         0x200
+#define I2C_WRITE       0x400
+#define I2C_BUSY        0x200
+#define I2C_ACK         0x100
+#define I2C_LAST        0x800
+#define I2C_STOP(base)  SH(0, 0, base)
+static int s_i2c_write(uint32_t base, int data)
 {
-    uint8_t busy;
-    LB(busy, 1, base);
-    return busy & BUSY_FLAG;
-}
-static void s_StartTranmission(uint32_t base)
-{
-    SB(START_TRANSMISSION, 1, base);
-}
-static void s_EndTransmission(uint32_t base)
-{
-    SB(END_TRANSMISSION, 1, base);
-}
-static uint8_t s_getAck(uint32_t base)
-{
-    uint8_t ack;
-    LB(ack, 1, base);
-    return ack & ACK_FLAG;
-}
-static uint8_t s_i2cWrite(uint32_t base, uint8_t data)
-{
-    SB(data, 0, base);
-    SB(TRIG_WRITE | START_TRANSMISSION, 1, base);
-    NOP();
-    while (s_isBusy(base));
-    return s_getAck(base);
-}
-static void s_i2cRead(uint32_t base, uint8_t *data)
-{
-    SB(TRIG_READ | START_TRANSMISSION, 1, base);
-    NOP();
-    while (s_isBusy(base));
-    LB(*data, 0, base);
-}
-int i2cWrite(uint32_t base, uint8_t address, uint8_t *ptr_buffer, uint32_t len)
-{
-    s_StartTranmission(base);
-    address <<= 1;
-    while (s_isBusy(base));
-    if (s_i2cWrite(base, address))
+    SH(data | I2C_EN | I2C_TRG | I2C_WRITE, 0, base);
+    do
     {
-        s_EndTransmission(base);
+        LW(data, 0, base);
+    } while (data & I2C_BUSY);
+    if (data & I2C_ACK)
         return -1;
-    }
-    for (uint32_t i = 0; i < len; i++)
-        if (s_i2cWrite(base, ptr_buffer[i]))
+    return 0;
+}
+static int s_i2c_read(uint32_t base, uint8_t *data, int isLast)
+{
+    int ret;
+    SH(I2C_EN | I2C_TRG | (isLast ? I2C_LAST : 0), 0, base);
+    do
+    {
+        LW(ret, 0, base);
+    } while (ret & I2C_BUSY);
+    *data = ret;
+    return 0;
+}
+
+int i2c_write(uint32_t base, uint8_t address, uint8_t *ptr_buf, int len)
+{
+    int ret = 0;
+    if (!s_i2c_write(base, address))
+    {
+        for (int i = 0; i < len; i++)
         {
-            s_EndTransmission(base);
-            return -1;
+            if (s_i2c_write(base, ptr_buf[i]))
+            {
+                ret = -2;
+                break;
+            }
         }
-    s_EndTransmission(base);
-    return 0;
-}
-int i2cRead(uint32_t base, uint8_t address, uint8_t *ptr_buffer, uint32_t len)
-{
-    s_StartTranmission(base);
-    address = (address << 1) | 1;
-    while (s_isBusy(base));
-    if (s_i2cWrite(base, address))
-    {
-        s_EndTransmission(base);
-        return -1;
     }
-    for (uint32_t i = 0; i < len; i++)
-        s_i2cRead(base, &ptr_buffer[i]);
-    s_EndTransmission(base);
-    return 0;
+    else
+    {
+        ret = -1;
+    }
+    I2C_STOP(base);
+    return ret;    
+}
+int i2c_read(uint32_t base, uint8_t address, uint8_t *ptr_buf, int len)
+{
+    int ret = 0;
+    if (!s_i2c_write(base, address))
+    {
+        for (int i = 0; i < len; i++)
+        {
+            s_i2c_read(base, &ptr_buf[i], i == len - 1);
+        }
+    }
+    else
+    {
+        ret = -1;
+    }
+    I2C_STOP(base);
+    return ret;
 }
