@@ -10,18 +10,25 @@
 #define I2C_STOP(base)  SH(0, 0, base)
 static int s_i2c_write(uint32_t base, int data)
 {
+    int ret;
     SH(data | I2C_EN | I2C_TRG | I2C_WRITE, 0, base);
     do
     {
         LW(data, 0, base);
     } while (data & I2C_BUSY);
     if (data & I2C_ACK)
-        return -1;
-    return 0;
+        ret = -1;
+    else
+        ret = 0;
+    return ret;
 }
 static int s_i2c_read(uint32_t base, uint8_t *data, int isLast)
 {
     int ret;
+    do
+    {
+        LW(ret, 0, base);
+    } while (ret & I2C_BUSY);
     SH(I2C_EN | I2C_TRG | (isLast ? I2C_LAST : 0), 0, base);
     do
     {
@@ -33,7 +40,12 @@ static int s_i2c_read(uint32_t base, uint8_t *data, int isLast)
 
 int i2c_write(uint32_t base, uint8_t address, uint8_t *ptr_buf, int len)
 {
-    int ret = 0;
+    int ret;
+    do
+    {
+        LW(ret, 0, base);
+    } while (ret & I2C_BUSY);
+    ret = 0;
     if (!s_i2c_write(base, address))
     {
         for (int i = 0; i < len; i++)
@@ -54,7 +66,12 @@ int i2c_write(uint32_t base, uint8_t address, uint8_t *ptr_buf, int len)
 }
 int i2c_read(uint32_t base, uint8_t address, uint8_t *ptr_buf, int len)
 {
-    int ret = 0;
+    int ret;
+    do
+    {
+        LW(ret, 0, base);
+    } while (ret & I2C_BUSY);
+    ret = 0;
     if (!s_i2c_write(base, address))
     {
         for (int i = 0; i < len; i++)
