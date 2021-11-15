@@ -1,26 +1,35 @@
 #include "dev/spi.h"
 #include "dev/io.h"
-#define SPI_BUSY    0x100
+#define SPI_DATA_OFFSET     0x0
+#define SPI_CMD_OFFSET      0x4
+#define SPI_STATUS_OFFSET   0x4
+#define SPI_BUSY            0x1
 inline void spi_start_transfer(uint32_t base)
 {
-    SB(1, 1, base);
+    SB(1, SPI_CMD_OFFSET, base);
 }
-uint8_t spi_transfer(uint32_t base, uint8_t data)
+int spi_transfer(uint32_t base, int data)
 {
     uint32_t ret;
-    SB(data, 0, base);
+    SW(data, SPI_DATA_OFFSET, base);
     do
     {
-        LW(ret, 0, base);
+        LW(ret, SPI_STATUS_OFFSET, base);
     } 
     while (ret & SPI_BUSY);
+    LW(ret, SPI_DATA_OFFSET, base);
     return ret;
 }
 inline void spi_end_transfer(uint32_t base)
 {
-    SB(0, 1, base);
+    SB(0, SPI_CMD_OFFSET, base);
 }
-void spi_set_frequecy(uint32_t base, uint32_t freq)
+void spi_set_frequency(uint32_t base, uint32_t freq)
 {
-    SH((freq * 65536) / F_CPU, 1, base); 
+    freq = (uint64_t)(freq * 65536) / (2*F_CPU);
+    SH(freq, SPI_CMD_OFFSET + 2, base); 
+}
+inline void spi_set_mode(uint32_t base, int mode)
+{
+    SB(mode, SPI_CMD_OFFSET + 1, base);
 }
