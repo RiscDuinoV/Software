@@ -1,18 +1,13 @@
-#include <stdint.h>
-#include "dev/io.h"
 #include "dev/gpio.h"
-void pinMode(uint8_t pin, uint8_t mode)
+void pinMode(int pin, int mode)
 {
-    uint32_t gpio_base = GPIO_BASE + pin*4;
-    gpio_setDirection(gpio_base, mode);
+    gpio_set_direction(GPIO_NUM(pin), mode);
 }
-void digitalWrite(uint8_t pin, uint8_t val)
+void digitalWrite(int pin, int val)
 {
-    uint32_t gpio_base = GPIO_BASE + pin*4;
-    gpio_Write(gpio_base, val);
+    gpio_write(GPIO_NUM(pin), val);
 }
-int digitalRead(uint8_t pin)
+int digitalRead(int pin)
 {
-    uint32_t gpio_base = GPIO_BASE + pin*4;
-    return gpio_Read(gpio_base);
+    return gpio_read(GPIO_NUM(pin));
 }

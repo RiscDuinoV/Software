@@ -12,6 +12,7 @@ static int s_i2c_write(uint32_t base, int data)
 {
     int ret;
     SH(data | I2C_EN | I2C_TRG | I2C_WRITE, 0, base);
+    NOP();
     do
     {
         LW(data, 0, base);
@@ -85,4 +86,9 @@ int i2c_read(uint32_t base, uint8_t address, uint8_t *ptr_buf, int len)
     }
     I2C_STOP(base);
     return ret;
+}
+void i2c_set_frequency(uint32_t base, uint32_t freq)
+{
+    freq = ((uint64_t)freq * 2 * 65536) / F_CPU;
+    SH(freq, 2, base); 
 }

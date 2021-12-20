@@ -1,26 +1,25 @@
 #include "dev/gpio.h"
 #include "dev/io.h"
-void gpio_setDirection(uint32_t base, uint8_t direction)
+#define GPIO_DATA_OFFSET    0
+#define GPIO_CTRL_OFFSET    4
+void gpio_set_direction(uint32_t base, int direction)
 {
-    uint8_t tmp;
-    LB(tmp, 2, base);
-    tmp = (tmp & 0x6) | (direction & 0x1);
-    SB(tmp, 2, base);
+    SB(direction, GPIO_CTRL_OFFSET, base);
 }
-void gpio_Write(uint32_t base, uint32_t value)
+void gpio_write(uint32_t base, int value)
 {
-    SH(value, 0, base);
+    SW(value, GPIO_DATA_OFFSET, base);
 }
-int gpio_Read(uint32_t base)
+int gpio_read(uint32_t base)
 {
-    uint8_t tmp;
-    LH(tmp, 0, base);
-    return tmp;
+    int ret;
+    LW(ret, GPIO_DATA_OFFSET, base);
+    return 0;
 }
-void gpio_Toggle(uint32_t base)
+void gpio_toggle(uint32_t base)
 {
-    uint16_t tmp;
-    LH(tmp, 0, base);
+    int tmp;
+    LW(tmp, GPIO_DATA_OFFSET, base);
     tmp = ~tmp;
-    SH(tmp, 0, base);
+    SW(tmp, GPIO_DATA_OFFSET, base);
 }

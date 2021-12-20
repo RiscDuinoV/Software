@@ -1,14 +1,19 @@
-#ifndef GPIO_H_
-#define GPIO_H_
+#ifndef GPIO_H
+#define GPIO_H
+#include <stdint.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include <stdint.h>
-void gpio_setDirection(uint32_t base, uint8_t direction);
-void gpio_Write(uint32_t base, uint32_t value);
-int gpio_Read(uint32_t base);
-void gpio_Toggle(uint32_t base);
+#include "dev/io.h"
+#define GPIO_INPUT  0
+#define GPIO_OUTPUT 1
+#define GPIO_HIGH   1
+#define GPIO_LOW    0
+void gpio_set_direction(uint32_t base, int direction);
+void gpio_write(uint32_t base, int value);
+int gpio_read(uint32_t base);
+void gpio_toggle(uint32_t base);
 #ifdef __cplusplus
 }
 #endif
-#endif // GPIO_H_
+#endif // GPIO_H

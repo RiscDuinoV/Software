@@ -9,12 +9,13 @@ extern "C" {
 #include "dev/interrupt_controller.h"
 #include "wiring.h"
 #include "dev/io.h"
-#define HIGH 0x1
-#define LOW  0x0
+#include "dev/gpio.h"
+#define HIGH GPIO_HIGH
+#define LOW  GPIO_LOW
 
-#define INPUT 0x0
-#define OUTPUT 0x1
-#define INPUT_PULLUP 0x2
+#define INPUT           GPIO_INPUT
+#define OUTPUT          GPIO_OUTPUT
+#define INPUT_PULLUP    INPUT
 
 #define PI 3.1415926535897932384626433832795
 #define HALF_PI 1.5707963267948966192313216916398
@@ -64,7 +65,7 @@ extern "C" {
 #define bitWrite(value, bit, bitvalue) ((bitvalue) ? bitSet(value, bit) : bitClear(value, bit))
 
 #ifndef _NOP
-#define _NOP() do { __asm__ volatile ("nop"); } while (0)
+#define _NOP() NOP()
 #endif
 
 typedef unsigned int word;
@@ -72,9 +73,9 @@ typedef unsigned int word;
 #define bit(b) (1UL << (b))
 typedef bool boolean;
 typedef uint8_t byte;
-void pinMode(uint32_t pin, uint32_t mode);
-void digitalWrite(uint32_t pin, uint32_t val);
-int digitalRead(uint32_t pin);
+void pinMode(int pin, int mode);
+void digitalWrite(int pin, int val);
+int digitalRead(int pin);
 #ifdef __cplusplus
 }
 #endif

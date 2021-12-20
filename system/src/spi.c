@@ -1,5 +1,6 @@
 #include "dev/spi.h"
 #include "dev/io.h"
+#include <stdio.h>
 #define SPI_DATA_OFFSET     0x0
 #define SPI_CMD_OFFSET      0x4
 #define SPI_STATUS_OFFSET   0x4
@@ -26,7 +27,7 @@ inline void spi_end_transfer(uint32_t base)
 }
 void spi_set_frequency(uint32_t base, uint32_t freq)
 {
-    freq = (uint64_t)(freq * 65536) / (2*F_CPU);
+    freq = ((uint64_t)freq * 2 * 65536) / F_CPU;
     SH(freq, SPI_CMD_OFFSET + 2, base); 
 }
 inline void spi_set_mode(uint32_t base, int mode)

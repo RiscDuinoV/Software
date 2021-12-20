@@ -7,7 +7,7 @@ class HardwareSerial : public Print
 private:
     volatile uint8_t *_UART_BASE;
 public:
-    HardwareSerial(uint32_t UART_BASE) {_UART_BASE = (volatile uint8_t *)UART_BASE;}
+    HardwareSerial(uint32_t base) {_UART_BASE = (volatile uint8_t *)base;}
     ~HardwareSerial() {}
     void begin(uint32_t baud);
     int available();
