@@ -11,10 +11,10 @@
 #define GPIO_BASE       0xFFFFF600
 #define UART_BASE       0xFFFFFB00
 
-#define I2C_NUM(x)      I2C_BASE + (x)*4
-#define SPI_NUM(x)      SPI_BASE + (x)*4
-#define GPIO_NUM(x)     GPIO_BASE + (x)*8
-#define UART_NUM(x)     UART_BASE + (x)*4
+#define I2C_NUM(x)      (I2C_BASE + (x)*64)
+#define SPI_NUM(x)      (SPI_BASE + (x)*64)
+#define GPIO_NUM(x)     (GPIO_BASE + (x)*8)
+#define UART_NUM(x)     (UART_BASE + (x)*64)
 
 #define	IO_LED		    IO_ADDR(0x090)	/* word, WR */
 

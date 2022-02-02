@@ -1,6 +1,6 @@
 #include "dev/i2c.h"
 #include "dev/io.h"
-
+#include <stdio.h>
 #define I2C_EN          0x100
 #define I2C_TRG         0x200
 #define I2C_WRITE       0x400
@@ -91,4 +91,21 @@ void i2c_set_frequency(uint32_t base, uint32_t freq)
 {
     freq = ((uint64_t)freq * 2 * 65536) / F_CPU;
     SH(freq, 2, base); 
+}
+void i2c_detect(uint32_t base)
+{
+    int address;
+    for (int i = 0; i < 128; i += 16)
+    {
+        printf("%02X", i);
+        for (int j = 0; j < 16; j++)
+        {
+            address = (i + j) << 1;
+            if (!i2c_read(base, address, NULL, 0))
+                printf(" %02X", address);
+            else
+                printf(" --");
+        }
+        printf("\n");
+    }
 }

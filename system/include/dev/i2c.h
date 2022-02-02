@@ -8,6 +8,7 @@ extern "C" {
 int i2c_write(uint32_t base, uint8_t address, uint8_t *ptr_buf, int len);
 int i2c_read(uint32_t base, uint8_t address, uint8_t *ptr_buf, int len);
 void i2c_set_frequency(uint32_t base, uint32_t freq);
+void i2c_detect(uint32_t base);
 #ifdef __cplusplus
 }
 #endif
