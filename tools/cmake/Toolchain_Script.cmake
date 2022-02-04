@@ -30,9 +30,9 @@ set(CMAKE_STRIP                     ${TOOLCHAIN_PATH}/bin/${TOOLCHAIN_PREFIX}str
 set(CMAKE_DEBUG_COMPILER            ${TOOLCHAIN_PATH}/bin/${TOOLCHAIN_PREFIX}gdb${WIN_EXE})
 set(CMAKE_DEBUG_COMPILER_ENV_VAR    "")
 set(FLAGS "-march=${ARCH} -mabi=${ABI} -DF_CPU=${F_CPU} -fpeel-loops -ftree-ter -ffreestanding -ffunction-sections -fdata-sections -Wall -I${COMPILER_LIBRARY_PATH}/system/include -I${COMPILER_LIBRARY_PATH}/cores/riscduinov")
-set(CMAKE_ASM_FLAGS                 "${FLAGS} ${CMAKE_ASM_FLAGS}" CACHE INTERNAL "")
-set(CMAKE_C_FLAGS                   "${FLAGS} ${CMAKE_C_FLAGS}" CACHE INTERNAL "")
-set(CMAKE_CXX_FLAGS                 "${FLAGS} -fno-rtti -fno-exceptions -fpermissive ${CMAKE_CXX_FLAGS}" CACHE INTERNAL "")
+set(CMAKE_ASM_FLAGS                 "${FLAGS}" CACHE INTERNAL "")
+set(CMAKE_C_FLAGS                   "${FLAGS}" CACHE INTERNAL "")
+set(CMAKE_CXX_FLAGS                 "${FLAGS} -fno-rtti -fno-exceptions -fpermissive" CACHE INTERNAL "")
 
 set(CMAKE_C_FLAGS_DEBUG             "-Os -g" CACHE INTERNAL "")
 set(CMAKE_C_FLAGS_RELEASE           "-Os -DNDEBUG" CACHE INTERNAL "")
