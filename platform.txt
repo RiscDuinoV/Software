@@ -1,49 +1,68 @@
 
 #
-# f32c MI32/RV32 (mips/risc-v) Core and platform.
+# XtrRiscv RV32 (risc-v) Core and platform.
 #
 
-name=RiscDuinoV
-version=0.1.0
+name=XtrRiscv
+version=0.2.0
+
+abi=ilp32
+flags=-march={arch} -mabi={abi} -DF_CPU={build.f_cpu} -fpeel-loops -ftree-ter -ffreestanding -ffunction-sections -fdata-sections -Wall -I{build.system.path} -I{build.system.path}/include -I{build.core.path}/riscduinov
+flags_release=-Os -DNDEBUG
+linker_file=linker_script.ld
+mem_size={upload.maximum_size}
+section_start=2K
+stack_size={build.stacksize}
+heap_size={build.heapsize}
+compiler.define=-DARDUINO=
+
 source_file={build.system.path}/src/riscv/start.S
 # Compile variables
 # ----------------------
-compiler-prefix=riscv64-unknown
-compiler.c.cmd={compiler-prefix}-elf-gcc
-compiler.c.flags=-c -Os -march={arch} -mabi=ilp32 -DF_CPU={build.f_cpu} -fpeel-loops -ftree-ter -ffreestanding -ffunction-sections -fdata-sections -Wall -std=gnu11 "-I{build.system.path}/include" "-I{build.system.path}/src" 
-compiler.c.extra_flags="-I{build.system.path}/src/riscv"
-compiler.cpp.cmd={compiler-prefix}-elf-g++
-compiler.cpp.flags=-c -Os -march={arch} -mabi=ilp32 -DF_CPU={build.f_cpu} -fpeel-loops -ftree-ter -ffreestanding -ffunction-sections -fdata-sections -fno-rtti -fno-exceptions -Wall -std=gnu++11 "-I{build.system.path}/include"
+compiler-prefix=riscv64-unknown-elf-
+
+compiler.c.cmd={compiler-prefix}gcc
+compiler.c.flags={flags_release} {flags}
+compiler.c.extra_flags=
+
+compiler.cpp.cmd={compiler-prefix}g++
+compiler.cpp.flags={flags_release} {flags} -fno-rtti -fno-exceptions -fpermissive
 compiler.cpp.extra_flags=
-compiler.ld.cmd={compiler-prefix}-elf-g++
-compiler.ar.cmd={compiler-prefix}-elf-ar
+
+compiler.ld.cmd={compiler-prefix}g++
+compiler.ld.flags=-mcmodel=medany -T{build.system.path}/../tools/linker_scripts/{linker_file} -nostartfiles -nostdlib -nodefaultlibs --specs=nano.specs --specs=nosys.specs -static -Xlinker --gc-sections -Xlinker --defsym=MEMSIZE={mem_size} -Xlinker --defsym=SECTION_START={section_start} -Xlinker --defsym=STACK_SIZE={stack_size} -Xlinker --defsym=HEAP_SIZE={heap_size} -nostartfiles -nostdlib -nodefaultlibs
+compiler.ld.extra_flags=-lgcc -lc
+
+compiler.ar.cmd={compiler-prefix}ar
 compiler.ar.flags=rcs
 compiler.ar.extra_flags=
+
 compiler.objcopy.eep.flags=-O srec
-compiler.objcopy.cmd={compiler-prefix}-elf-objcopy
+compiler.objcopy.cmd={compiler-prefix}objcopy
+
 compiler.elf2hex.flags=-R .rel.dyn -R .MIPS.abiflags
-compiler.elf2hex.cmd={compiler-prefix}-elf-objcopy
-compiler.size.cmd={compiler-prefix}-elf-size
-compiler.define=-DARDUINO=
+compiler.elf2hex.cmd={compiler-prefix}objcopy
+
+compiler.size.cmd={compiler-prefix}size
+
 
 compiler.path={runtime.tools.riscv-compiler.path}/bin/
 
 
 ## Compile S files
-recipe.S.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.flags} -DARDUINO={runtime.ide.version} {compiler.c.extra_flags} {includes} "{source_file}" -o "{object_file}"
+recipe.S.o.pattern="{compiler.path}{compiler.c.cmd}" -c {compiler.c.flags} -DARDUINO={runtime.ide.version} {compiler.c.extra_flags} {includes} "{source_file}" -o "{object_file}"
 
 ## Compile c files
-recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.flags} -DARDUINO={runtime.ide.version} {compiler.c.extra_flags} {includes} "{source_file}" -o "{object_file}"
+recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" -c {compiler.c.flags} -DARDUINO={runtime.ide.version} {compiler.c.extra_flags} {includes} "{source_file}" -o "{object_file}"
 
 ## Compile c++ files
-recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} -DARDUINO={runtime.ide.version} {compiler.cpp.extra_flags} {includes} "{source_file}" -o "{object_file}"
+recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" -c {compiler.cpp.flags} -DARDUINO={runtime.ide.version} {compiler.cpp.extra_flags} {includes} "{source_file}" -o "{object_file}"
 
 ## Create archives
 recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{archive_file_path}" "{object_file}"
 
 ## Link gc-sections, archives, and objects
-#recipe.c.combine.pattern="{compiler.path}{compiler.ld.cmd}" -o "{build.path}/{build.project_name}.elf" {object_files}  -march={arch} -mabi=ilp32 --specs=nano.specs --specs=nosys.specs -nostdlib -Xlinker --gc-sections -mcmodel=medany -nostartfiles -ffreestanding -T{build.system.path}/linker_scripts/link_user.ld -L{build.system.path}/lib/riscv -lcrt0 "{archive_file_path}" -lArduinoLib -lriscvSoC -lc -lgcc -Xlinker --defsym=BRAM={upload.maximum_size}
-recipe.c.combine.pattern="{compiler.path}{compiler.ld.cmd}" -o "{build.path}/{build.project_name}.elf" {object_files}  -march={arch} -mabi=ilp32 --specs=nano.specs --specs=nosys.specs -nostdlib -Xlinker --gc-sections -mcmodel=medany -nostartfiles -ffreestanding -T{build.system.path}/linker_scripts/linker_script.ld -L{build.system.path}/lib/riscv "{archive_file_path}" -lc -lgcc -Xlinker --defsym=MEMSIZE={upload.maximum_size} -Xlinker --defsym=SECTION_START=2K -Xlinker --defsym=STACK_SIZE={build.stacksize} -Xlinker --defsym=HEAP_SIZE={build.heapsize}
+recipe.c.combine.pattern="{compiler.path}{compiler.ld.cmd}" {compiler.cpp.flags} {compiler.ld.flags} {archive_file_path} {object_files} -o "{build.path}/{build.project_name}.elf" {compiler.ld.extra_flags}
 
 ## Create binary
 recipe.objcopy.eep.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.flags} -O binary "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.bin"
