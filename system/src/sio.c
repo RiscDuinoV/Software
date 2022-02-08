@@ -41,7 +41,7 @@ int sio_puts(uint32_t base, const char *str)
 	}
 	return i;
 }
-int sio_printNumber(uint32_t base, unsigned long n, uint8_t base_print)
+int sio_print_number(uint32_t base, uint32_t n, int base_print)
 {
     char buf[8 * sizeof(long) + 1]; // Assumes 8-bit chars plus zero byte.
     char* str = &buf[sizeof(buf) - 1];
@@ -60,15 +60,19 @@ int sio_printNumber(uint32_t base, unsigned long n, uint8_t base_print)
 
     return sio_puts(base, str);
 }
-int sio_printFloat(uint32_t base, double number, uint8_t digits)
+int sio_print_float(uint32_t base, float number, int digits)
+{
+    return sio_print_double(base, number, digits);
+}
+int sio_print_double(uint32_t base, double number, int digits)
 {
     int n = 0;
 	uint64_t *tmp = ((uint64_t *)&number);
 	
     if (*tmp == 0x7FFFFFFFFFFFFFFF || *tmp == 0x7FF8000000000001 || *tmp == 0x7FF0000000000001) return sio_puts(base, "nan");
-    if (*tmp == 0x7FF0000000000000 || *tmp == 0xFFF0000000000000) return sio_puts(base, "inf");
-    if (number > 4294967040.0) return sio_puts(base, "ovf");  // constant determined empirically
-    if (number < -4294967040.0) return sio_puts(base, "ovf");  // constant determined empirically
+    if (*tmp == 0x7FF0000000000000 || *tmp == 0xFFF0000000000000) return sio_puts(base, "\n\r");
+    if (number > 4294967040.0) return sio_puts(base, "ovf\n\r");  // constant determined empirically
+    if (number < -4294967040.0) return sio_puts(base, "ovf\n\r");  // constant determined empirically
 
     // Handle negative numbers
     if (number < 0.0)
@@ -87,7 +91,7 @@ int sio_printFloat(uint32_t base, double number, uint8_t digits)
     // Extract the integer part of the number and print it
     unsigned long int_part = (unsigned long)number;
     double remainder = number - (double)int_part;
-    n += sio_printNumber(base, int_part, 10);
+    n += sio_print_number(base, int_part, 10);
 
     // Print the decimal point, but only if there are digits beyond
     if (digits > 0) {
@@ -99,8 +103,12 @@ int sio_printFloat(uint32_t base, double number, uint8_t digits)
     {
         remainder *= 10.0;
         unsigned int toPrint = (unsigned int)(remainder);
-        n += sio_printNumber(base, toPrint, 10);
+        n += sio_print_number(base, toPrint, 10);
         remainder -= toPrint;
     }
     return n;
+}
+void sio_set_baud(uint32_t base, uint32_t baud)
+{
+    
 }

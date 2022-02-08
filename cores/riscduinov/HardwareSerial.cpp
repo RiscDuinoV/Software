@@ -1,30 +1,21 @@
-#include <HardwareSerial.h>
-#include <dev/io.h>
+#include "HardwareSerial.h"
+#include "dev/sio.h"
 void HardwareSerial::begin(uint32_t baud)
 {
-    uint32_t val;
-
-    val = baud;
-    if (baud > 1000000)
-    val /= 10;
-    val = val * 1024 / 1000 * 1024 / (F_CPU / 1000) + 1;
-    if (baud > 1000000)
-    val *= 10;
-
-    volatile uint16_t  *hp = (volatile uint16_t *)&_UART_BASE[2];
-    *hp = val;
+    sio_set_baud(m_base, baud);
 }
 int HardwareSerial::available()
 {
-    return _UART_BASE[1] & SIO_RX_FULL;
+    return sio_available(m_base);
 }
 size_t HardwareSerial::write(char c)
 {
-    while (_UART_BASE[1] & SIO_TX_BUSY);
-    _UART_BASE[0] = c;
+    sio_putchar(m_base, c);
     return 1;
 }
-char HardwareSerial::read()
+int HardwareSerial::read()
 {
-    return _UART_BASE[0];
+    int c;
+    c = sio_getch(m_base);
+    return c;
 }

@@ -7,7 +7,7 @@ name=XtrRiscv
 version=0.2.0
 
 abi=ilp32
-flags=-march={arch} -mabi={abi} -DF_CPU={build.f_cpu} -fpeel-loops -ftree-ter -ffreestanding -ffunction-sections -fdata-sections -Wall -I{build.system.path} -I{build.system.path}/include -I{build.core.path}/riscduinov
+flags=-march={arch} -mabi={abi} -DF_CPU={build.f_cpu} -fpeel-loops -ftree-ter -ffreestanding -ffunction-sections -fdata-sections -Wall -I{build.system.path} -I{build.system.path}/include
 flags_release=-Os -DNDEBUG
 linker_file=linker_script.ld
 mem_size={upload.maximum_size}
@@ -16,7 +16,8 @@ stack_size={build.stacksize}
 heap_size={build.heapsize}
 compiler.define=-DARDUINO=
 
-source_file={build.system.path}/src/riscv/start.S
+#source_file={build.system.path}/src/riscv/start.S
+source_file=
 # Compile variables
 # ----------------------
 compiler-prefix=riscv64-unknown-elf-
@@ -62,7 +63,7 @@ recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" -c {compiler.cpp.flags}
 recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{archive_file_path}" "{object_file}"
 
 ## Link gc-sections, archives, and objects
-recipe.c.combine.pattern="{compiler.path}{compiler.ld.cmd}" {compiler.cpp.flags} {compiler.ld.flags} {archive_file_path} {object_files} -o "{build.path}/{build.project_name}.elf" {compiler.ld.extra_flags}
+recipe.c.combine.pattern="{compiler.path}{compiler.ld.cmd}" {compiler.cpp.flags} {compiler.ld.flags} {object_files} -o "{build.path}/{build.project_name}.elf" "{archive_file_path}" {compiler.ld.extra_flags}
 
 ## Create binary
 recipe.objcopy.eep.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.flags} -O binary "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.bin"

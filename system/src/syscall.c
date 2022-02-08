@@ -133,7 +133,7 @@ int _execve(char *name, char **argv, char **env)
 }
 int _gettimeofday( struct timeval *tv, void *tzvp )
 {
-    uint64_t t = getMTIME() * 1e9 / F_CPU;  // get uptime in nanoseconds
+    uint64_t t = get_mtime() * 1e9 / F_CPU;  // get uptime in nanoseconds
     tv->tv_sec = t / 1000000000;  // convert to seconds
     tv->tv_usec = ( t % 1000000000 ) / 1000;  // get remaining microseconds
     return 0;  // return non-zero for error

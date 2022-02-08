@@ -1,99 +1,99 @@
-#include <dev/interrupt_controller.h>
-#include <dev/io.h>
-#include <dev/sio.h>
-#include <riscv/csr.h>
-volatile uint64_t *extIntrMask = (volatile uint64_t *)INTERRUPT_MASK;
-volatile uint64_t *extIntrReg = (volatile uint64_t *)INTERRUPT_REG;
+#include "dev/interrupt_controller.h"
+#include "dev/io.h"
+#include "dev/sio.h"
+#include "riscv/csr.h"
+volatile uint64_t *external_interrupt_mask = (volatile uint64_t *)INTERRUPT_MASK;
+volatile uint64_t *external_interrupt_register = (volatile uint64_t *)INTERRUPT_REG;
 void (*fun_ptr)(void);
-static uint32_t extIntrVect[64] = {0};
-static uint32_t timerIntrVect = 0;
+static uint32_t external_interrupt_vector[64] = {0};
+static uint32_t timer_interrupt_vector = 0;
 void interrupt_handler()
 {
     switch (csr_read(mcause) & 0x7FFFFFFFU)
     {
     case MCAUSE_MACHINE_EXTERNAL:
-        externalInterruptHandler();
+        external_interrupt_handler();
         break;
     case MCAUSE_MACHINE_TIMER:
-        timerInterruptHandler();
+        timer_interrupt_handler();
         break;
     default:
         break;
     }
 }
-void externalInterruptHandler()
+void external_interrupt_handler()
 {
     uint64_t mask;
     int i;
     for (i = 0; i < 64; i++)
     {
         mask = (1ULL << i);
-        if ((*extIntrReg & *extIntrMask & mask) == mask)
+        if ((*external_interrupt_register & *external_interrupt_mask & mask) == mask)
         {
-            fun_ptr = (void *)extIntrVect[i];
+            fun_ptr = (void *)external_interrupt_vector[i];
             (*fun_ptr)();
         }
     }
 }
-void attachExternalInterrupt(int num, void (*fun_callback)(void))
+void attach_external_interrupt(int num, void (*fun_callback)(void))
 {
     if (num < 64 && num >= 0)
     {
-        extIntrVect[num] = (uint32_t)fun_callback;
-        *extIntrMask |= (uint64_t)(1ULL << num);
+        external_interrupt_vector[num] = (uint32_t)fun_callback;
+        *external_interrupt_mask |= (uint64_t)(1ULL << num);
     }
 }
-void enableExternalInterrupt(int num)
+void enable_external_interrupt(int num)
 {
     if (num < 64 && num >= 0)
-        *extIntrMask |= (uint64_t)(1ULL << num);
+        *external_interrupt_mask |= (uint64_t)(1ULL << num);
 }
-void detachExternalInterrupt(int num)
+void detach_external_interrupt(int num)
 {
     if (num < 64)
-        *extIntrMask &= ~((uint64_t)(1ULL << num));
+        *external_interrupt_mask &= ~((uint64_t)(1ULL << num));
 }
-void timerInterruptHandler()
+void timer_interrupt_handler()
 {
-    fun_ptr = (void *)(timerIntrVect);
+    fun_ptr = (void *)(timer_interrupt_vector);
     (*fun_ptr)();
 }
-void attachTimerInterrupt(int num, void (*fun_callback)(void))
+void attach_timer_interrupt(int num, void (*fun_callback)(void))
 {
     if (!num)
     {
-        timerIntrVect = (uint32_t)fun_callback;
+        timer_interrupt_vector = (uint32_t)fun_callback;
     }
 }
-void enableTimerInterrupt(int num)
+void enable_timer_interrupt(int num)
 {
 
 }
-void dettachTimerInterrupt(int num)
+void dettach_timer_interrupt(int num)
 {
 
 }
-inline void enableMachineInterrupts()
+inline void enable_machine_interrupts()
 {
     csr_read_set(mstatus, MSTATUS_MIE);
 }
-inline void disableMachineInterrupts()
+inline void disable_machine_interrupts()
 {
     csr_read_clear(mstatus, MSTATUS_MIE);
 }
-inline void enableExternalInterrupts()
+inline void enable_external_interrupts()
 {
     csr_read_set(mie, MIE_MEIE);
 }
-inline void disableExternalInterrupts()
+inline void disable_external_interrupts()
 {
     csr_read_clear(mie, MIE_MEIE);
 }
-inline void enableTimerInterrupts()
+inline void enable_timer_interrupts()
 {
     csr_read_set(mie, MIE_MTIE);
 }
-inline void disableTimerInterrupts()
+inline void disable_timer_interrupts()
 {
     csr_read_clear(mie, MIE_MTIE);
 }

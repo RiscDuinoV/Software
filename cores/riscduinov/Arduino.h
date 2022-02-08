@@ -1,21 +1,24 @@
-#ifndef Arduino_h
-#define Arduino_h
-#ifdef __cplusplus
-extern "C" {
-#endif
+#ifndef ARDUINO_H
+#define ARDUINO_H
+
+#include <sys/cdefs.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+
+__BEGIN_DECLS
+
 #include "dev/interrupt_controller.h"
 #include "wiring.h"
 #include "dev/io.h"
 #include "dev/gpio.h"
-#define HIGH GPIO_HIGH
-#define LOW  GPIO_LOW
 
-#define INPUT           GPIO_INPUT
-#define OUTPUT          GPIO_OUTPUT
-#define INPUT_PULLUP    INPUT
+#define HIGH GPIO_HIGH
+#define LOW GPIO_LOW
+
+#define INPUT GPIO_INPUT
+#define OUTPUT GPIO_OUTPUT
+#define INPUT_PULLUP INPUT
 
 #define PI 3.1415926535897932384626433832795
 #define HALF_PI 1.5707963267948966192313216916398
@@ -30,9 +33,9 @@ extern "C" {
 #define LSBFIRST 0
 #define MSBFIRST 1
 
-#define CHANGE 1
+#define CHANGE  1
 #define FALLING 2
-#define RISING 3
+#define RISING  3
 
 // undefine stdlib's abs if encountered
 #ifdef abs
@@ -43,13 +46,13 @@ extern "C" {
 #define max(a,b) ((a)>(b)?(a):(b))
 #define abs(x) ((x)>0?(x):-(x))
 #define constrain(amt,low,high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
-#define round(x)     ((x)>=0?(long)((x)+0.5):(long)((x)-0.5))
+#define round(x) ((x)>=0?(long)((x)+0.5):(long)((x)-0.5))
 #define radians(deg) ((deg)*DEG_TO_RAD)
 #define degrees(rad) ((rad)*RAD_TO_DEG)
 #define sq(x) ((x)*(x))
 
-#define interrupts() sei()
-#define noInterrupts() cli()
+#define interrupts() enable_machine_interrupts()
+#define noInterrupts() disable_machine_interrupts()
 
 #define clockCyclesPerMicrosecond() ( F_CPU / 1000000L )
 #define clockCyclesToMicroseconds(a) ( (a) / clockCyclesPerMicrosecond() )
@@ -71,20 +74,26 @@ extern "C" {
 typedef unsigned int word;
 
 #define bit(b) (1UL << (b))
-typedef bool boolean;
 typedef uint8_t byte;
 void pinMode(int pin, int mode);
 void digitalWrite(int pin, int val);
 int digitalRead(int pin);
-#ifdef __cplusplus
-}
-#endif
+
+void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
+uint8_t shiftIn(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder);
+
+void setup(void);
+void loop(void);
+
+__END_DECLS
 // C++ Declarations
+#ifdef __cplusplus
+typedef bool boolean;
+
 #include "WCharacter.h"
 #include "WString.h"
 #include "HardwareSerial.h"
-void setup(void);
-void loop(void);
+
 
 uint16_t makeWord(uint16_t w);
 uint16_t makeWord(byte h, byte l);
@@ -103,6 +112,8 @@ long random(long, long);
 void randomSeed(unsigned long);
 long map(long, long, long, long, long);
 
-static HardwareSerial Serial(UART_USB_BASE);
-
-#endif // Arduino_h
+#ifdef ARDUINO
+static HardwareSerial Serial = HardwareSerial(UART_NUM(0));
+#endif
+#endif
+#endif // ARDUINO_H

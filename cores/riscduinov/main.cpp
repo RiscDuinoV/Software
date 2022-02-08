@@ -1,9 +1,9 @@
 #define ARDUINO_MAIN
 #include "Arduino.h"
-#include "SrcWrapper.h"
 void init()
 {
-    enableMachineInterrupts();
+    enable_machine_interrupts();
+    enable_external_interrupts();
 }
 
 int main(void)

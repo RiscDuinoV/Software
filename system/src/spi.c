@@ -1,6 +1,5 @@
 #include "dev/spi.h"
 #include "dev/io.h"
-#include <stdio.h>
 #define SPI_DATA_OFFSET     0x0
 #define SPI_CMD_OFFSET      0x4
 #define SPI_STATUS_OFFSET   0x4

@@ -4,9 +4,9 @@
 extern "C" {
 #endif
 #include <stdint.h>
-uint64_t getMTIME();
-void setMTIMECMP(uint64_t val);
-uint64_t getMTIMECMP();
+uint64_t get_mtime();
+void set_mtime_cmp(uint64_t val);
+uint64_t get_mtime_cmp();
 void delay_ms(uint32_t ms);
 void delay_us(uint32_t us);
 #define delay(ms)   delay_ms(ms)
