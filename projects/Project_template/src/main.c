@@ -1,8 +1,7 @@
 #include <stdio.h>
-#include <dev/io.h>      // IO PERIPHERIALS
-#include <dev/sio.h>     // UART
-#include <riscv/mtime.h> // delay
-#include <dev/i2c.h>
+#include "dev/io.h"      // IO PERIPHERIALS
+#include "dev/sio.h"     // UART
+#include "riscv/mtime.h" // delay
 #ifdef __cplusplus
 extern "C"
 {
@@ -15,25 +14,12 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif
-#define EXAMPLE_BASE    0x80000000
 int main(void)
 {
-    uint8_t data[sizeof("Hey!")];
-    uint32_t Value;
     while (1)
     {
-        
         printf("Hello, World\n");
-        for (int i = 0; i < 8; i++)
-        {
-            OUTB(IO_LED, (1 << i));
-            delay(100);
-        }
-        for (int i = 0; i < 8; i++)
-        {
-            OUTB(IO_LED, (0x80 >> i));
-            delay(100);
-        }
+        delay(1000);
     }
     return 0;
 }

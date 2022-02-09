@@ -1,7 +1,6 @@
 # Specify the program tool
 set(PROGRAM_TOOL "${CMAKE_CURRENT_LIST_DIR}/../Programmer/${DIR_NAME}/Programmer${WIN_EXE}")
-include("${CMAKE_CURRENT_LIST_DIR}/../../system/src/CMakeLists.txt")
-include("${CMAKE_CURRENT_LIST_DIR}/../../cores/riscduinov/CMakeLists.txt")
+include("${CMAKE_CURRENT_LIST_DIR}/../../CMakeLists.txt")
 # if(NOT ${USE_SYSTEM_STATIC_LIBRARY})
 #     message("USE_SYSTEM_STATIC_LIBRARY = ${USE_SYSTEM_STATIC_LIBRARY}")
 #     include("${CMAKE_CURRENT_LIST_DIR}/../../Hardware/software/system/src/CMakeLists.txt")

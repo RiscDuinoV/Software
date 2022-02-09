@@ -44,7 +44,7 @@ int main(void)
         start = 0;
     }
     sio_puts(UART_USB_BASE, "ret1 = ");
-    sio_printNumber(UART_USB_BASE, ret, 16);
+    sio_print_number(UART_USB_BASE, ret, 16);
     sio_puts(UART_USB_BASE, "\n");
     ret = xTaskCreate(
         Task2,
@@ -64,12 +64,14 @@ int main(void)
     }
     
     sio_puts(UART_USB_BASE, "ret2 = ");
-    sio_printNumber(UART_USB_BASE, ret, 16);
+    sio_print_number(UART_USB_BASE, ret, 16);
     sio_puts(UART_USB_BASE, "\n");
     if (start == 1)
         vTaskStartScheduler();
+    
     while (1)
     {
+/*
         for (int i = 0; i < 8; i++)
         { 
             OUTB(IO_LED, (1 << i));
@@ -80,6 +82,7 @@ int main(void)
             OUTB(IO_LED, (0x80 >> i));
             delay(100);
         }
+*/
     }
     return 0;
 }

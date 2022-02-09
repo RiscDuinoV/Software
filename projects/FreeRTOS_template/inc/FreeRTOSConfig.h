@@ -93,8 +93,8 @@
  *----------------------------------------------------------*/
 
 /* See https://www.freertos.org/Using-FreeRTOS-on-RISC-V.html */
-#include <dev/io.h>
-#include <dev/sio.h>
+#include "dev/io.h"
+#include "dev/sio.h"
 #define configMTIME_BASE_ADDRESS 	( MTIME_BASE )
 #define configMTIMECMP_BASE_ADDRESS ( MTIMECMP_BASE )
 
