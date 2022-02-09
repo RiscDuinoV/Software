@@ -79,7 +79,7 @@ recipe.size.regex=\s*[0-9]+\s+[0-9]+\s+[0-9]+\s+([0-9]+).*
 # Uploader tools
 # -------------------
 
-# RiscDuinoV uploader tool
+# xtr_uploader uploader tool
 
 tools.programmer.path={runtime.tools.Programmer.path}
 tools.programmer.cmd.path={path}/programmer

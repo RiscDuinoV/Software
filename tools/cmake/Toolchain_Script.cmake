@@ -36,7 +36,7 @@ set(CMAKE_SIZE                      ${COMPILER_PATH}${COMPILER_PREFIX}size${WIN_
 set(CMAKE_STRIP                     ${COMPILER_PATH}${COMPILER_PREFIX}strip${WIN_EXE} CACHE INTERNAL "")
 set(CMAKE_DEBUG_COMPILER            ${COMPILER_PATH}${COMPILER_PREFIX}gdb${WIN_EXE})
 set(CMAKE_DEBUG_COMPILER_ENV_VAR    "")
-set(FLAGS "-march=${ARCH} -mabi=${ABI} -DF_CPU=${F_CPU} -fpeel-loops -ftree-ter -ffreestanding -ffunction-sections -fdata-sections -Wall -I${COMPILER_LIBRARY_PATH}/system/include -I${COMPILER_LIBRARY_PATH}/cores/riscduinov")
+set(FLAGS "-march=${ARCH} -mabi=${ABI} -DF_CPU=${F_CPU} -fpeel-loops -ftree-ter -ffreestanding -ffunction-sections -fdata-sections -Wall -I${COMPILER_LIBRARY_PATH}/system/include -I${COMPILER_LIBRARY_PATH}/cores/xtrduino")
 set(CMAKE_ASM_FLAGS                 "${FLAGS}" CACHE INTERNAL "")
 set(CMAKE_C_FLAGS                   "${FLAGS}" CACHE INTERNAL "")
 set(CMAKE_CXX_FLAGS                 "${FLAGS} -fno-rtti -fno-exceptions -fpermissive" CACHE INTERNAL "")
