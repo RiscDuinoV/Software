@@ -1,4 +1,3 @@
-#include "src_wrapper.h"
 #include "src/gpio.c"
 #include "src/i2c.c"
 #include "src/interrupt_controller.c"
