@@ -20,7 +20,6 @@
 */
 
 #include "WString.h"
-#include "itoa.h"
 
 /*********************************************/
 /*  Constructors                             */

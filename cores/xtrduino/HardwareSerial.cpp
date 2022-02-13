@@ -8,7 +8,7 @@ int HardwareSerial::available()
 {
     return sio_available(m_base);
 }
-size_t HardwareSerial::write(char c)
+size_t HardwareSerial::write(uint8_t c)
 {
     sio_putchar(m_base, c);
     return 1;
@@ -18,4 +18,8 @@ int HardwareSerial::read()
     int c;
     c = sio_getch(m_base);
     return c;
+}
+int HardwareSerial::peek()
+{
+    return -1;
 }

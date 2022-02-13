@@ -19,7 +19,7 @@
 
 #ifndef Character_h
 #define Character_h
-#include "Arduino.h"
+
 #include <ctype.h>
 
 // WCharacter.h prototypes

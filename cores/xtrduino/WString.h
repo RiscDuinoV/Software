@@ -28,6 +28,7 @@
 #include <ctype.h>
 #include "avr/pgmspace.h"
 #include "avr/dtostrf.h"
+#include "itoa.h"
 
 // When compiling programs with this class, the following gcc parameters
 // dramatically increase performance and memory (RAM) efficiency, typically
