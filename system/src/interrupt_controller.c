@@ -1,9 +1,12 @@
 #include "dev/interrupt_controller.h"
 #include "dev/io.h"
-#include "dev/sio.h"
 #include "riscv/csr.h"
-volatile uint64_t *external_interrupt_mask = (volatile uint64_t *)INTERRUPT_MASK;
-volatile uint64_t *external_interrupt_register = (volatile uint64_t *)INTERRUPT_REG;
+#include <stdio.h>
+#define INTERRUPT_SRC_OFFSET 0
+#define INTERRUPT_MASK_OFFSET 8
+#define INTERRUPT_CONTROL_OFFSET 0
+volatile uint64_t *external_interrupt_src = (volatile uint64_t *)(INTERRUPT_CONTROLLER_BASE + INTERRUPT_SRC_OFFSET);
+volatile uint64_t *external_interrupt_mask = (volatile uint64_t *)(INTERRUPT_CONTROLLER_BASE + INTERRUPT_MASK_OFFSET);
 void (*fun_ptr)(void);
 static uint32_t external_interrupt_vector[64] = {0};
 static uint32_t timer_interrupt_vector = 0;
@@ -13,6 +16,7 @@ void interrupt_handler()
     {
     case MCAUSE_MACHINE_EXTERNAL:
         external_interrupt_handler();
+        SW(0, 0, INTERRUPT_CONTROLLER_BASE); // Dummy write to finish isr fsm in vhdl
         break;
     case MCAUSE_MACHINE_TIMER:
         timer_interrupt_handler();
@@ -23,16 +27,18 @@ void interrupt_handler()
 }
 void external_interrupt_handler()
 {
-    uint64_t mask;
+    uint64_t mask, masked_interrupt;
     int i;
+    masked_interrupt = *external_interrupt_src & *external_interrupt_mask;
+    mask = 1;
     for (i = 0; i < 64; i++)
     {
-        mask = (1ULL << i);
-        if ((*external_interrupt_register & *external_interrupt_mask & mask) == mask)
+        if ((masked_interrupt & mask) == mask)
         {
             fun_ptr = (void *)external_interrupt_vector[i];
             (*fun_ptr)();
         }
+        mask = (mask << 1);
     }
 }
 void attach_external_interrupt(int num, void (*fun_callback)(void))
@@ -60,7 +66,7 @@ void timer_interrupt_handler()
 }
 void attach_timer_interrupt(int num, void (*fun_callback)(void))
 {
-    if (!num)
+    //if (!num)
     {
         timer_interrupt_vector = (uint32_t)fun_callback;
     }

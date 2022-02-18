@@ -5,7 +5,6 @@ extern "C" {
 #endif
 #include <stdint.h>
 void interrupt_handler();
-void externalInterruptHandler();
 void external_interrupt_handler();
 void attach_external_interrupt(int num, void (*fun_callback)(void));
 void enable_external_interrupt(int num);

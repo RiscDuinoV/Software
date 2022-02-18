@@ -1,31 +1,29 @@
-#include <dev/io.h>
-#include <dev/sio.h>
-uint8_t sio_available(uint32_t base)
+#include "dev/io.h"
+#include "dev/sio.h"
+#define	SIO_TX_BUSY	0x4
+#define	SIO_RX_FULL	0x1
+int sio_available(uint32_t base)
 {
-    uint8_t c;
-    //INB(c, x);
+    int c;
 	LB(c, 1, base);
     return (c & SIO_RX_FULL);
 }
-uint8_t sio_getch(uint32_t base)
+int sio_getch(uint32_t base)
 {
-    uint8_t c;
-    //INB(c, base);
+    int c;
 	while (!sio_available(base));
 	LB(c, 0, base);
 	return c;
 }
 
-int sio_putchar(uint32_t base, const uint8_t c)
+int sio_putchar(uint32_t base, int c)
 {
-	uint8_t s;
+	int s;
 	do
 	{
-		//INB(s, base + 1);
 		LB(s, 1, base);
 	} 
 	while (s & SIO_TX_BUSY);
-	//OUTB(IO_SIO_BYTE, (c));
 	SB(c, 0, base);
 	return 1;
 }
@@ -45,7 +43,6 @@ int sio_print_number(uint32_t base, uint32_t n, int base_print)
 {
     char buf[8 * sizeof(long) + 1]; // Assumes 8-bit chars plus zero byte.
     char* str = &buf[sizeof(buf) - 1];
-
     *str = '\0';
 
     // prevent crash if called with base_print == 1
@@ -83,7 +80,7 @@ int sio_print_double(uint32_t base, double number, int digits)
 
     // Round correctly so that print(1.999, 2) prints as "2.00"
     double rounding = 0.5;
-    for (uint8_t i = 0; i < digits; ++i)
+    for (int i = 0; i < digits; ++i)
         rounding /= 10.0;
 
     number += rounding;
@@ -108,7 +105,13 @@ int sio_print_double(uint32_t base, double number, int digits)
     }
     return n;
 }
+#define X 262144
+#define Y 64
 void sio_set_baud(uint32_t base, uint32_t baud)
 {
-    
+    int baud_value = (baud * Y)/(uint32_t)((F_CPU / X) + 0.5);
+    //sio_puts(base, "baud_value = ");
+    //sio_print_number(base, baud_value, 10);
+    //sio_puts(base, "\n\r");
+    SW(baud_value, 4, base);
 }

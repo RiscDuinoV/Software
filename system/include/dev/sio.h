@@ -4,9 +4,9 @@
 extern "C" {
 #endif
 #include <stdint.h>
-uint8_t sio_available(uint32_t base);
-uint8_t sio_getch(uint32_t base);
-int sio_putchar(uint32_t base, const uint8_t c);
+int sio_available(uint32_t base);
+int sio_getch(uint32_t base);
+int sio_putchar(uint32_t base, int c);
 int sio_puts(uint32_t base, const char *str);
 int sio_print_number(uint32_t base, uint32_t n, int base_print);
 int sio_print_float(uint32_t base, float number, int digits);
