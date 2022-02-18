@@ -7,7 +7,8 @@
 #include <sys/time.h>
 #include <sys/times.h>
 #include "riscv/mtime.h"
-
+//#include "dev/io.h"
+//#include "dev/sio.h"
 /* Variables */
 //#undef errno
 extern int errno;
@@ -43,19 +44,17 @@ void _exit (int status)
 __attribute__((weak)) int _read(int file, char *ptr, int len)
 {
 	int DataIdx;
-
+	len = 1; // bug : set len to 1 because this function is called with len = 1024 no matters what
 	for (DataIdx = 0; DataIdx < len; DataIdx++)
 	{
 		*ptr++ = __io_getchar();
 	}
-
-return len;
+	return len;
 }
 
 __attribute__((weak)) int _write(int file, char *ptr, int len)
 {
 	int DataIdx;
-
 	for (DataIdx = 0; DataIdx < len; DataIdx++)
 	{
 		__io_putchar(*ptr++);
