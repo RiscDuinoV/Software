@@ -115,3 +115,8 @@ void sio_set_baud(uint32_t base, uint32_t baud)
     //sio_puts(base, "\n\r");
     SW(baud_value, 4, base);
 }
+__attribute__((weak)) int __io_putchar(int ch)
+{
+    sio_putchar(UART_NUM(0), ch);
+    return 0;
+}
