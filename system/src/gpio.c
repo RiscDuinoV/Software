@@ -14,7 +14,7 @@ int gpio_read(uint32_t base)
 {
     int ret;
     LW(ret, GPIO_DATA_OFFSET, base);
-    return 0;
+    return ret;
 }
 void gpio_toggle(uint32_t base)
 {
