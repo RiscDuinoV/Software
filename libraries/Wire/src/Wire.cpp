@@ -27,6 +27,7 @@
 
 #include "Wire.h"
 #include "dev/i2c.h"
+#include "dev/io.h"
 
 // Constructors ////////////////////////////////////////////////////////////////
 
@@ -142,7 +143,7 @@ int TwoWire::requestFrom(int address, int quantity, int iaddress, int isize, int
     }
     // perform blocking read into buffer
     //uint8_t read = twi_readFrom(address, rxBuffer, quantity, sendStop);
-    int read = i2c_read(m_base, address, rxBuffer, quantity);
+    int read = i2c_read(m_base, (address << 1) | 1, rxBuffer, quantity);
     // set rx buffer iterator vars
     rxBufferIndex = 0;
     rxBufferLength = read;
@@ -163,9 +164,9 @@ int TwoWire::requestFrom(int address, int quantity)
 void TwoWire::beginTransmission(int address)
 {
     // indicate that we are transmitting
-    transmitting = 1;
+    //transmitting = 1;
     // set address of targeted slave
-    txAddress = address;
+    txAddress = address << 1;
     // reset tx buffer iterator vars
     txBufferIndex = 0;
     txBufferLength = 0;
@@ -195,7 +196,7 @@ int TwoWire::endTransmission(int sendStop)
     txBufferIndex = 0;
     txBufferLength = 0;
     // indicate that we are done transmitting
-    transmitting = 0;
+    //transmitting = 0;
     return ret;
 }
 
@@ -360,6 +361,8 @@ void TwoWire::onRequest(void (*function)(void))
     user_onRequest = function;
 }
 */
-// Preinstantiate Objects //////////////////////////////////////////////////////
 
-//TwoWire Wire = TwoWire();
+// Preinstantiate Objects //////////////////////////////////////////////////////
+#ifdef ARDUINO
+TwoWire Wire = TwoWire(I2C_NUM(0));
+#endif 

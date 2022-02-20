@@ -100,8 +100,8 @@ void i2c_detect(uint32_t base)
         printf("%02X", i);
         for (int j = 0; j < 16; j++)
         {
-            address = (i + j) << 1;
-            if (!i2c_read(base, address, NULL, 0))
+            address = (i + j);
+            if (!i2c_read(base, (address << 1) + 1, NULL, 0))
                 printf(" %02X", address);
             else
                 printf(" --");

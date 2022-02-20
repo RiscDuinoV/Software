@@ -43,11 +43,11 @@ private:
     uint8_t txBufferIndex;
     uint8_t txBufferLength;
 
-    static uint8_t transmitting;
-    static void (*user_onRequest)(void);
-    static void (*user_onReceive)(int);
-    static void onRequestService(void);
-    static void onReceiveService(uint8_t *, int);
+    // static uint8_t transmitting;
+    // static void (*user_onRequest)(void);
+    // static void (*user_onReceive)(int);
+    // static void onRequestService(void);
+    // static void onReceiveService(uint8_t *, int);
 
     uint32_t m_base;
     int m_address;
@@ -73,8 +73,8 @@ public:
     virtual int read(void);
     virtual int peek(void);
     virtual void flush(void);
-    //void onReceive(void (*)(int));
-    //void onRequest(void (*)(void));
+    // void onReceive(void (*)(int));
+    // void onRequest(void (*)(void));
 
     inline size_t write(unsigned long n) { return write((uint8_t)n); }
     inline size_t write(long n) { return write((uint8_t)n); }
@@ -82,5 +82,7 @@ public:
     inline size_t write(int n) { return write((uint8_t)n); }
     using Print::write;
 };
-
+#ifdef ARDUINO
+extern TwoWire Wire;
+#endif
 #endif

@@ -1,5 +1,6 @@
 #include "HardwareSerial.h"
 #include "dev/sio.h"
+#include "dev/io.h"
 void HardwareSerial::begin(uint32_t baud)
 {
     sio_set_baud(m_base, baud);
@@ -23,3 +24,7 @@ int HardwareSerial::peek()
 {
     return -1;
 }
+
+#ifdef ARDUINO
+HardwareSerial Serial = HardwareSerial(UART_NUM(0));
+#endif

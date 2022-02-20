@@ -21,4 +21,7 @@ public:
     using Print::write; // pull in write(str) and write(buf, size) from Print
     operator bool() { return true; }
 };
+#ifdef ARDUINO
+extern HardwareSerial Serial;
+#endif
 #endif /* HARDWARESERIAL_H_ */

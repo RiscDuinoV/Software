@@ -112,8 +112,5 @@ long random(long, long);
 void randomSeed(unsigned long);
 long map(long, long, long, long, long);
 
-#ifdef ARDUINO
-static HardwareSerial Serial = HardwareSerial(UART_NUM(0));
-#endif
 #endif
 #endif // ARDUINO_H
