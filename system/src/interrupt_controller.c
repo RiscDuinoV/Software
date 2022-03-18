@@ -5,10 +5,12 @@
 #define INTERRUPT_SRC_OFFSET 0
 #define INTERRUPT_MASK_OFFSET 8
 #define INTERRUPT_CONTROL_OFFSET 0
+#define INTERRUPT_NUM_OFFSET (4*4)
 volatile uint64_t *external_interrupt_src = (volatile uint64_t *)(INTERRUPT_CONTROLLER_BASE + INTERRUPT_SRC_OFFSET);
 volatile uint64_t *external_interrupt_mask = (volatile uint64_t *)(INTERRUPT_CONTROLLER_BASE + INTERRUPT_MASK_OFFSET);
-void (*fun_ptr)(void);
+void (*fun_ptr)(void *args);
 static uint32_t external_interrupt_vector[64] = {0};
+static uint32_t external_interrupt_args[64] = {0};
 static uint32_t timer_interrupt_vector = 0;
 void interrupt_handler()
 {
@@ -27,6 +29,7 @@ void interrupt_handler()
 }
 void external_interrupt_handler()
 {
+/*
     uint64_t mask, masked_interrupt;
     int i;
     masked_interrupt = *external_interrupt_src & *external_interrupt_mask;
@@ -40,12 +43,18 @@ void external_interrupt_handler()
         }
         mask = (mask << 1);
     }
+*/
+    int interrupt_num;
+    LW(interrupt_num, INTERRUPT_NUM_OFFSET, INTERRUPT_CONTROLLER_BASE);
+    fun_ptr = (void *)external_interrupt_vector[interrupt_num];
+    (*fun_ptr)((void *)external_interrupt_args[interrupt_num]);
 }
-void attach_external_interrupt(int num, void (*fun_callback)(void))
+void attach_external_interrupt(int num, void (*fun_callback)(void *), void *fun_args)
 {
     if (num < 64 && num >= 0)
     {
         external_interrupt_vector[num] = (uint32_t)fun_callback;
+        external_interrupt_args[num] = (uint32_t)fun_args;
         *external_interrupt_mask |= (uint64_t)(1ULL << num);
     }
 }
@@ -62,9 +71,9 @@ void detach_external_interrupt(int num)
 void timer_interrupt_handler()
 {
     fun_ptr = (void *)(timer_interrupt_vector);
-    (*fun_ptr)();
+    (*fun_ptr)(NULL);
 }
-void attach_timer_interrupt(int num, void (*fun_callback)(void))
+void attach_timer_interrupt(int num, void (*fun_callback)(void *), void *fun_args)
 {
     //if (!num)
     {
