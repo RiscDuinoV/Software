@@ -20,4 +20,6 @@
 
 #define INTERRUPT_CONTROLLER_BASE 0xFFFFFC00
 
+#define BOOT_TRAP_BASE 0xFFFFFFFC
+
 #endif /* !_IO_H_ */

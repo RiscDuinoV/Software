@@ -151,11 +151,12 @@ int sio_print_double(uint32_t base, double number, int digits)
 char *sio_gets(uint32_t base, char *str)
 {
     int c;
+    char *s = str;
     while ((c = sio_getch(base)) != '\n')
     {
-        *str = c;
-        str++;
+        *s++ = c;
     }
+    *s = '\0';
     return str;
 }
 int sio_printf(uint32_t base, const char *format, ...)

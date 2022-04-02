@@ -1,13 +1,27 @@
 #include <stdint.h>
 #include "dev/io.h"
-#include "dev/sio.h"
 #define HEADER_WORD 0xCAFECAFE
 #ifdef SPI_FLASH
 #include "flash.h"
 #endif
+#define	IO_SIO_BYTE	    UART_NUM(0)	/* byte, RW */
+#define	IO_SIO_STATUS	(UART_NUM(0) + 1)	/* byte, RD */
+#define	SIO_TX_BUSY	0x4
+#define	SIO_RX_OVERRUN	0x2
+#define	SIO_RX_FULL	0x1
+
 const char* ARCH = "RISC-V\n\r";
 typedef enum status_t {GET_HEADER = 0, GET_ADR, GET_SIZE, GET_DATA} status_t;
-void sio_pchar(uint8_t c)
+inline int sio_getchar()
+{
+    int s;
+    do
+    {
+        INW(s, IO_SIO_BYTE);
+    } while (s & SIO_RX_FULL);
+    return s & 0xFF;
+}
+inline int sio_putchar(int c)
 {
     int s;
     do
@@ -15,8 +29,9 @@ void sio_pchar(uint8_t c)
         INB(s, IO_SIO_STATUS);
     } while (s & SIO_TX_BUSY);
     OUTB(IO_SIO_BYTE, (c));
+    return 0;
 }
-void boot(void* pc)
+inline void boot(void* pc)
 {
     __asm __volatile__(
     "mv ra, zero;"
@@ -25,6 +40,9 @@ void boot(void* pc)
     : "r" (pc)
         );
 }
+int sio_getchar();
+int sio_putchar(int c);
+void boot(void* pc);
 int main()
 {
     uint8_t byte;
@@ -37,7 +55,8 @@ int main()
 #ifdef SPI_FLASH
     uint8_t ram_only = 0;
 #endif // SPI_FLASH
-    LW(word, 0, IO_CPU_RESET_BOOT_TRAP);
+//    LW(word, 0, BOOT_TRAP_BASE);
+    INW(word, BOOT_TRAP_BASE);
     if (!(word & 0x3))
     {
         if ((word & ~0x3) != 0)
@@ -60,16 +79,11 @@ int main()
 #endif // SPI_FLASH
     for (byte = 0; ARCH[byte] != '\0'; byte++)
     {
-        sio_pchar(ARCH[byte]);
+        sio_putchar(ARCH[byte]);
     }
     while (1)
     {
-        do
-        {
-            LB(byte, 1, UART_USB_BASE);
-        }
-        while (!(byte & SIO_RX_FULL));
-        LB(byte, 0, UART_USB_BASE);
+        byte = sio_getchar();
         ((uint8_t *)(&word))[gotWord] = byte;
         gotWord = (gotWord + 1) % 4;
         if (!(gotWord % 4))
@@ -111,7 +125,8 @@ int main()
                     flash_write_block(12, word, (uint8_t *)mem_ptr);
                 }
 #endif /* SPI_FLASH */
-                SW(begin_addr, 0, IO_CPU_RESET_BOOT_TRAP);
+                //SW(begin_addr, 0, BOOT_TRAP_BASE);
+                OUTW(BOOT_TRAP_BASE, begin_addr);
             }
         }
     }
