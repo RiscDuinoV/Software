@@ -7,7 +7,6 @@
 #define	IO_SIO_BYTE	    UART_NUM(0)	/* byte, RW */
 #define	IO_SIO_STATUS	(UART_NUM(0) + 1)	/* byte, RD */
 #define	SIO_TX_BUSY	0x4
-#define	SIO_RX_OVERRUN	0x2
 #define	SIO_RX_FULL	0x1
 
 const char* ARCH = "RISC-V\n\r";
@@ -17,9 +16,10 @@ inline int sio_getchar()
     int s;
     do
     {
-        INW(s, IO_SIO_BYTE);
-    } while (s & SIO_RX_FULL);
-    return s & 0xFF;
+        INB(s, IO_SIO_BYTE + 1);
+    } while (!(s & SIO_RX_FULL));
+    INB(s, IO_SIO_BYTE);
+    return s;
 }
 inline int sio_putchar(int c)
 {
